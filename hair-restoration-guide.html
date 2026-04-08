@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hair Restoration Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(170deg, #faf9f7 0%, #f0eeea 100%);
+    font-family: 'Outfit', 'DM Sans', system-ui, sans-serif;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+  }
+  #root { min-height: 100vh; }
+  button { cursor: pointer; }
+  button:hover { opacity: 0.92; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, Fragment } = React;
+
+/* ═══════════════════════ HAIR CONDITION SVGs ═══════════════════════ */
+
+function HairConditionHead({ stage, size = 120 }) {
+  const cx = 60, cy = 55, rx = 38, ry = 36;
+
+  function makeStrands() {
+    const strands = [];
+    const seed = stage === "early" ? 1 : stage === "moderate" ? 2 : 3;
+    // Use deterministic random based on position for consistent rendering
+    function pRand(x, y, s) { return ((Math.sin(x * 12.9898 + y * 78.233 + s) * 43758.5453) % 1 + 1) % 1; }
+
+    for (let row = 0; row < 14; row++) {
+      for (let col = 0; col < 12; col++) {
+        const bx = 24 + col * 7 + (row % 2) * 3.5;
+        const by = 20 + row * 5.5;
+        const dx = (bx - cx) / rx;
+        const dy = (by - cy) / ry;
+        if (dx * dx + dy * dy > 0.85) continue;
+
+        const crownDist = Math.sqrt(Math.pow(bx - 58, 2) + Math.pow(by - 40, 2));
+        const frontDist = by - 22;
+        const partDist = Math.abs(bx - 60);
+        const hash = (bx * 7 + by * 13 + seed) % 10;
+        const r = pRand(bx, by, seed);
+
+        let opacity, thickness;
+
+        if (stage === "early") {
+          if (hash < 2 && crownDist < 14) continue;
+          if (hash < 1 && partDist < 4) continue;
+          opacity = 0.55 + r * 0.25;
+          thickness = 1.3 + r * 0.5;
+        } else if (stage === "moderate") {
+          if (crownDist < 8 && hash < 5) continue;
+          if (crownDist < 16 && hash < 3) continue;
+          if (partDist < 5 && hash < 4) continue;
+          if (frontDist < 6 && hash < 3) continue;
+          const sideFactor = bx < 35 || bx > 85 ? 1.2 : 1;
+          const crownThin = crownDist < 18 ? 0.4 : 0.8;
+          opacity = (0.35 + r * 0.25) * crownThin * sideFactor;
+          thickness = 1.0 + r * 0.4;
+        } else {
+          const topZone = by < 50 && bx > 32 && bx < 88;
+          if (topZone && crownDist < 25 && hash < 7) continue;
+          if (topZone && hash < 5) continue;
+          if (frontDist < 10 && bx > 35 && bx < 85 && hash < 8) continue;
+          const isSide = bx < 34 || bx > 86 || by > 62;
+          if (!isSide && hash < 4) continue;
+          opacity = isSide ? 0.5 + r * 0.3 : 0.15 + r * 0.15;
+          thickness = isSide ? 1.3 + r * 0.4 : 0.7 + r * 0.3;
+        }
+
+        const angle = ((bx - 60) * 0.02) + (r - 0.5) * 0.3;
+        const len = 5 + r * 4;
+        strands.push({ x1: bx, y1: by, x2: bx + Math.sin(angle) * len, y2: by - Math.cos(angle) * len, o: opacity, w: thickness });
+      }
+    }
+    return strands;
+  }
+
+  const strands = makeStrands();
+  const conditionLabel = stage === "early" ? "Early Hair Fall" : stage === "moderate" ? "Moderate Thinning" : "Advanced Hair Loss";
+  const conditionColor = stage === "early" ? "#4a7c59" : stage === "moderate" ? "#8b5a2b" : "#2d5a7b";
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <svg viewBox="0 0 120 105" width={size} height={size * 0.875} fill="none">
+        <defs>
+          <radialGradient id={"scalp-" + stage} cx="50%" cy="45%" r="50%">
+            <stop offset="0%" stopColor="#F5DFC8" />
+            <stop offset="70%" stopColor="#EEDCC5" />
+            <stop offset="100%" stopColor="#E5CDB5" />
+          </radialGradient>
+        </defs>
+        <ellipse cx="18" cy="55" rx="5" ry="8" fill="#EEDCC5" stroke="#DFC9AF" strokeWidth="0.6" />
+        <ellipse cx="102" cy="55" rx="5" ry="8" fill="#EEDCC5" stroke="#DFC9AF" strokeWidth="0.6" />
+        <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill={"url(#scalp-" + stage + ")"} stroke="#DFC9AF" strokeWidth="1" />
+        {stage === "advanced" && <Fragment><ellipse cx="58" cy="38" rx="16" ry="12" fill="#F2DDC8" opacity="0.4" /><ellipse cx="60" cy="44" rx="12" ry="8" fill="#F5E2CE" opacity="0.3" /></Fragment>}
+        {stage === "moderate" && <ellipse cx="59" cy="40" rx="8" ry="6" fill="#F2DDC8" opacity="0.25" />}
+        {strands.map((s, i) => (
+          <line key={i} x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke="#3A2518" strokeWidth={s.w} strokeLinecap="round" opacity={s.o} />
+        ))}
+        {(stage === "early" || stage === "moderate") && (
+          <line x1="60" y1="22" x2="59" y2="52" stroke="#E5CDB5" strokeWidth={stage === "moderate" ? 2.5 : 1.5} strokeLinecap="round" opacity="0.4" />
+        )}
+        {stage === "early" && <Fragment>
+          <line x1="40" y1="78" x2="36" y2="92" stroke="#3A2518" strokeWidth="0.8" opacity="0.2" strokeLinecap="round" />
+          <line x1="65" y1="80" x2="68" y2="94" stroke="#3A2518" strokeWidth="0.8" opacity="0.18" strokeLinecap="round" />
+          <line x1="80" y1="76" x2="84" y2="88" stroke="#3A2518" strokeWidth="0.8" opacity="0.15" strokeLinecap="round" />
+          <line x1="50" y1="82" x2="46" y2="96" stroke="#3A2518" strokeWidth="0.7" opacity="0.12" strokeLinecap="round" />
+        </Fragment>}
+      </svg>
+      <div style={{ fontSize: "11px", fontWeight: 700, color: conditionColor, marginTop: "4px", letterSpacing: "0.3px" }}>{conditionLabel}</div>
+    </div>
+  );
+}
+
+/* ═══════════════════════ BEFORE/AFTER SVGs ═══════════════════════ */
+
+function BeforeAfterHead({ type }) {
+  const beforeHairs = type === "transplant"
+    ? [{x:38,y:20,h:16,o:0.2},{x:52,y:18,h:14,o:0.15},{x:66,y:19,h:15,o:0.18},{x:80,y:20,h:14,o:0.12},{x:22,y:32,h:18,o:0.6},{x:18,y:40,h:20,o:0.65},{x:96,y:32,h:18,o:0.6},{x:100,y:40,h:20,o:0.65},{x:16,y:48,h:18,o:0.55},{x:102,y:48,h:18,o:0.55}]
+    : type === "thinning"
+    ? [{x:30,y:22,h:16,o:0.3},{x:40,y:18,h:18,o:0.25},{x:50,y:16,h:20,o:0.35},{x:60,y:17,h:19,o:0.28},{x:70,y:18,h:17,o:0.3},{x:80,y:20,h:16,o:0.25},{x:88,y:24,h:15,o:0.3},{x:24,y:30,h:17,o:0.4},{x:94,y:30,h:17,o:0.4},{x:20,y:40,h:18,o:0.5},{x:98,y:40,h:18,o:0.5}]
+    : [{x:28,y:22,h:18,o:0.4},{x:38,y:18,h:20,o:0.45},{x:48,y:16,h:22,o:0.4},{x:58,y:16,h:21,o:0.42},{x:68,y:17,h:20,o:0.38},{x:78,y:19,h:18,o:0.4},{x:88,y:22,h:16,o:0.4},{x:22,y:34,h:18,o:0.5},{x:96,y:34,h:18,o:0.5}];
+
+  function pRand(i) { return ((Math.sin(i * 45.164) * 43758.5453) % 1 + 1) % 1; }
+  const afterHairs = Array.from({ length: 22 }, (_, i) => ({
+    x: 26 + (i % 6) * 13 + (Math.floor(i / 6) % 2) * 6,
+    y: 16 + Math.floor(i / 6) * 10,
+    h: 18 + pRand(i) * 6,
+    o: 0.5 + pRand(i + 50) * 0.3,
+  }));
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", padding: "20px 0" }}>
+      <div style={{ textAlign: "center" }}>
+        <svg viewBox="0 0 120 100" width="140" height="116" fill="none">
+          <ellipse cx="60" cy="55" rx="42" ry="38" fill="#FDEBD0" stroke="#E8D5C0" strokeWidth="1.2" />
+          {beforeHairs.map((h, i) => (
+            <line key={i} x1={h.x} y1={h.y} x2={h.x + (i % 2 ? 1 : -1)} y2={h.y - h.h} stroke="#5C4033" strokeWidth="1.6" strokeLinecap="round" opacity={h.o} />
+          ))}
+          {type === "falling" && <Fragment>
+            <line x1="34" y1="70" x2="30" y2="82" stroke="#5C4033" strokeWidth="1" opacity="0.25" strokeLinecap="round" />
+            <line x1="55" y1="72" x2="58" y2="86" stroke="#5C4033" strokeWidth="1" opacity="0.2" strokeLinecap="round" />
+            <line x1="78" y1="68" x2="82" y2="80" stroke="#5C4033" strokeWidth="1" opacity="0.22" strokeLinecap="round" />
+            <line x1="44" y1="74" x2="40" y2="88" stroke="#5C4033" strokeWidth="1" opacity="0.18" strokeLinecap="round" />
+          </Fragment>}
+          {type === "transplant" && <ellipse cx="58" cy="28" rx="20" ry="10" fill="#FDEBD0" stroke="#E8D5C0" strokeWidth="0.8" strokeDasharray="3 2" opacity="0.6" />}
+        </svg>
+        <div style={{ fontSize: "12px", color: "#bbb", fontWeight: 600, marginTop: "4px" }}>Before</div>
+      </div>
+      <svg viewBox="0 0 50 30" width="50" height="30" fill="none">
+        <path d="M5 15 L38 15" stroke="#4a7c59" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M32 8 L40 15 L32 22" stroke="#4a7c59" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      </svg>
+      <div style={{ textAlign: "center" }}>
+        <svg viewBox="0 0 120 100" width="140" height="116" fill="none">
+          <ellipse cx="60" cy="55" rx="42" ry="38" fill="#FDEBD0" stroke="#E8D5C0" strokeWidth="1.2" />
+          {afterHairs.map((h, i) => (
+            <line key={i} x1={h.x} y1={h.y} x2={h.x + (i % 3 === 0 ? 1 : i % 3 === 1 ? -1 : 0.5)} y2={h.y - h.h} stroke="#3D2B1F" strokeWidth="1.8" strokeLinecap="round" opacity={h.o} />
+          ))}
+        </svg>
+        <div style={{ fontSize: "12px", color: "#4a7c59", fontWeight: 700, marginTop: "4px" }}>After</div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════ DATA ═══════════════════════ */
+
+const SERVICES = {
+  gfc: {
+    key: "gfc", name: "GFC Therapy", full: "Growth Factor Concentrate",
+    color: "#4a7c59", light: "#e8f0e4", icon: "🌱", beforeAfterType: "falling",
+    oneLiner: "Uses your body's own growth proteins to strengthen weak hair and stop excessive falling.",
+    heroDesc: "Your hair follicles aren't dead — they're weakened. GFC extracts the natural growth proteins from your own blood, concentrates them, and delivers them to your scalp. These proteins signal weakened follicles to strengthen and grow thicker hair.",
+    steps: [
+      { title: "Blood sample taken", desc: "A small amount of blood is drawn — same as a routine blood test. Quick, 2 minutes.", icon: "💉" },
+      { title: "Growth proteins separated", desc: "Your blood is processed to isolate the growth factors — natural proteins your body makes for healing and repair.", icon: "🧪" },
+      { title: "Concentrated 5×", desc: "These proteins are concentrated to much higher levels than what's normally in your blood — a supercharged version of your body's repair system.", icon: "⚡" },
+      { title: "Applied to your scalp", desc: "The concentrate is applied to thinning areas through micro-applications. Growth factors reach the follicle roots directly.", icon: "✨" },
+    ],
+    expect: [
+      { l: "Sessions", v: "3–4 sessions", d: "Once a month" },
+      { l: "Each visit", v: "30–45 min", d: "Like a long lunch break" },
+      { l: "First results", v: "2–3 months", d: "Less hair fall first, then thickening" },
+      { l: "Comfort", v: "Mild", d: "Feels like tiny pinches" },
+      { l: "Downtime", v: "None", d: "Walk out and continue your day" },
+    ],
+    risks: {
+      safetyScore: 95, safetyLabel: "Very Safe",
+      common: [{ effect: "Mild redness at scalp", duration: "Fades in a few hours", severity: "low" }, { effect: "Slight tenderness", duration: "1–2 days", severity: "low" }],
+      uncommon: [{ effect: "Minor swelling", duration: "2–3 days", severity: "low" }, { effect: "Mild headache", duration: "Same day", severity: "low" }],
+      rare: [{ effect: "Infection at site", duration: "Treatable", severity: "med" }],
+      truthBomb: "Since GFC uses your own blood, there's virtually no risk of allergic reaction or rejection. It's one of the safest hair restoration treatments available. No major adverse effects have been reported in clinical studies.",
+      notAFit: "GFC won't help areas where follicles are completely gone. It strengthens existing weak hair — it can't create new follicles where none exist.",
+    },
+    bestFor: "Early hair fall & thinning",
+    idealUser: "You've recently noticed more hair falling or mild thinning and want to act before it gets worse.",
+    comp: { pain: 1, risk: 1, downtime: 0, sessions: "3–4", results: "2–3 months", permanence: "Needs maintenance every 6–12 months", cost: "₹₹", invasive: "Non-invasive" },
+  },
+  prp: {
+    key: "prp", name: "PRP Therapy", full: "Platelet Rich Plasma",
+    color: "#8b5a2b", light: "#f5ede4", icon: "💪", beforeAfterType: "thinning",
+    oneLiner: "A stronger treatment that uses your blood's healing platelets to boost hair density and regrow thinning areas.",
+    heroDesc: "PRP takes the most powerful healing cells from your blood — platelets — concentrates them to 3–5× normal levels, and injects them into thinning areas. Platelets release growth signals that wake up dormant follicles, improve blood supply, and trigger new hair growth.",
+    steps: [
+      { title: "Blood is drawn", desc: "A small amount of blood is taken — exactly like a standard blood test. Nothing unusual.", icon: "💉" },
+      { title: "Spun at high speed", desc: "A centrifuge separates your blood into three layers. The golden middle layer is rich in platelets — your body's natural healers.", icon: "🌀" },
+      { title: "Platelet-rich plasma extracted", desc: "This golden liquid has 3–5× more platelets than normal blood. Each platelet releases dozens of growth signals.", icon: "🧬" },
+      { title: "Micro-injected into scalp", desc: "Using very fine needles with numbing cream, PRP is placed precisely in thinning areas. It boosts blood flow and stimulates dormant follicles.", icon: "💫" },
+    ],
+    expect: [
+      { l: "Sessions", v: "3–6 sessions", d: "Every 3–4 weeks" },
+      { l: "Each visit", v: "45–60 min", d: "About an hour commitment" },
+      { l: "First results", v: "3–4 months", d: "Gradual thickening" },
+      { l: "Comfort", v: "Mild–Moderate", d: "Numbing cream reduces discomfort" },
+      { l: "Downtime", v: "Minimal", d: "Avoid washing hair for 24 hours" },
+    ],
+    risks: {
+      safetyScore: 90, safetyLabel: "Safe",
+      common: [{ effect: "Pain at injection sites", duration: "1–2 days", severity: "low" }, { effect: "Redness and mild swelling", duration: "24–48 hours", severity: "low" }, { effect: "Mild bruising", duration: "3–5 days", severity: "low" }],
+      uncommon: [{ effect: "Headache after procedure", duration: "1–2 days", severity: "low" }, { effect: "Itching at treated area", duration: "2–3 days", severity: "low" }],
+      rare: [{ effect: "Infection at injection site", duration: "Treatable with antibiotics", severity: "med" }, { effect: "Nerve injury", duration: "Usually temporary", severity: "med" }],
+      truthBomb: "PRP uses your own blood so there's no risk of rejection or allergic reaction. Side effects are mostly mild and temporary. The injections can cause some discomfort even with numbing cream — be prepared for that. Serious complications are very rare.",
+      notAFit: "PRP works best for thinning hair, not completely bald areas. If follicles are dead and gone, PRP cannot revive them. It strengthens and stimulates what's still there.",
+    },
+    bestFor: "Moderate thinning & density loss",
+    idealUser: "Your hair has been thinning for months and you need something stronger than basic treatments to bring back volume.",
+    comp: { pain: 2, risk: 1, downtime: 1, sessions: "3–6", results: "3–4 months", permanence: "Needs maintenance every 4–6 months", cost: "₹₹₹", invasive: "Minimally invasive" },
+  },
+  transplant: {
+    key: "transplant", name: "Hair Transplant", full: "Hair Transplantation (FUE)",
+    color: "#2d5a7b", light: "#e4eef5", icon: "✨", beforeAfterType: "transplant",
+    oneLiner: "Moves your own permanent hair from the back of your head to bald or severely thinned areas — grows naturally for life.",
+    heroDesc: "When hair follicles are completely gone from an area, no serum or therapy can bring them back. A hair transplant takes healthy follicles from the back of your head — where hair is genetically permanent — and relocates them to where you need them. These follicles grow naturally in their new location, forever.",
+    steps: [
+      { title: "Donor zone identified", desc: "The back and sides of your head have hair that's genetically programmed to never fall. This is the source — it grows back there too.", icon: "🗺️" },
+      { title: "Follicles extracted one by one", desc: "Using a micro-precision tool, each follicle is carefully removed individually. No stitches, no linear scar. Tiny dots that heal invisibly.", icon: "🔬" },
+      { title: "Recipient area prepared", desc: "Tiny channels are created at the exact angle and direction for natural-looking growth. This is where the surgeon's artistry matters most.", icon: "✏️" },
+      { title: "Follicles placed permanently", desc: "Each follicle is positioned in its new home. They carry their original DNA — they'll grow naturally and permanently. Yours for life.", icon: "🌱" },
+    ],
+    expect: [
+      { l: "Procedure", v: "1 session", d: "6–8 hours (one day)" },
+      { l: "Anesthesia", v: "Local only", d: "You're awake, zero pain during" },
+      { l: "First growth", v: "3–4 months", d: "New hair starts appearing" },
+      { l: "Full results", v: "12 months", d: "Complete density achieved" },
+      { l: "Recovery", v: "7–10 days", d: "Mostly cosmetic (scabbing)" },
+    ],
+    risks: {
+      safetyScore: 82, safetyLabel: "Generally Safe",
+      common: [{ effect: "Swelling on forehead", duration: "3–5 days", severity: "low" }, { effect: "Scabbing at transplant sites", duration: "7–14 days", severity: "low" }, { effect: "Numbness in donor/recipient area", duration: "2–6 weeks", severity: "low" }, { effect: "Mild pain & tightness", duration: "3–7 days", severity: "low" }],
+      uncommon: [{ effect: "Shock loss (temporary shedding)", duration: "2–3 months then regrows", severity: "med" }, { effect: "Itching during healing", duration: "1–2 weeks", severity: "low" }, { effect: "Minor scarring (tiny dots)", duration: "Permanent but invisible", severity: "low" }],
+      rare: [{ effect: "Infection", duration: "Treatable with antibiotics", severity: "med" }, { effect: "Unnatural appearance", duration: "Depends on surgeon skill", severity: "high" }, { effect: "Follicle damage during extraction", duration: "Permanent loss of some grafts", severity: "med" }, { effect: "Cysts at transplant site", duration: "Treatable", severity: "med" }],
+      truthBomb: "Hair transplant is a surgical procedure, even though it's minimally invasive. Most side effects (swelling, scabbing, numbness) are temporary and expected — your doctor will prepare you for them. The biggest real risk is choosing an inexperienced surgeon — this can lead to unnatural results. Always verify your surgeon's credentials, see their before/after portfolio, and don't choose based on price alone.",
+      notAFit: "You need enough donor hair on the back/sides of your head. If donor supply is limited, expectations should be adjusted. Also, transplanted hair is permanent but your existing hair may continue to thin — you may need GFC/PRP alongside to maintain the surrounding area.",
+    },
+    bestFor: "Bald patches, receding hairline, advanced loss",
+    idealUser: "You have areas where hair is completely gone or severely thinned and you want a permanent, natural-looking solution.",
+    comp: { pain: 2, risk: 2, downtime: 3, sessions: "1", results: "12 months (full)", permanence: "Permanent — lasts a lifetime", cost: "₹₹₹₹₹", invasive: "Surgical (minimally)" },
+  },
+};
+
+function getRecommendation(a) {
+  let s = { gfc: 0, prp: 0, transplant: 0 };
+  if (a.noticing === "falling") { s.gfc += 3; s.prp += 1; }
+  if (a.noticing === "thinning") { s.gfc += 1; s.prp += 3; }
+  if (a.noticing === "patches") { s.prp += 1; s.transplant += 3; }
+  if (a.noticing === "receding") { s.prp += 1; s.transplant += 3; }
+  if (a.duration === "recent") { s.gfc += 3; s.prp += 1; }
+  if (a.duration === "months") { s.gfc += 2; s.prp += 2; }
+  if (a.duration === "year") { s.prp += 3; s.transplant += 1; }
+  if (a.duration === "years") { s.prp += 1; s.transplant += 3; }
+  if (a.goal === "stop") { s.gfc += 3; s.prp += 2; }
+  if (a.goal === "thicken") { s.prp += 3; s.gfc += 1; }
+  if (a.goal === "fill") { s.transplant += 3; s.prp += 1; }
+  const sorted = Object.entries(s).sort((a, b) => b[1] - a[1]);
+  return { primary: sorted[0][0], secondary: sorted[1][0] };
+}
+
+function stageFor(key) { return key === "gfc" ? "early" : key === "prp" ? "moderate" : "advanced"; }
+
+/* ═══════════════════════ UI COMPONENTS ═══════════════════════ */
+
+const S = {
+  serif: { fontFamily: "'Instrument Serif', Georgia, serif", fontWeight: 400 },
+  back: { background: "none", border: "none", cursor: "pointer", fontSize: "14px", color: "#999", marginBottom: "16px", fontFamily: "inherit", padding: 0 },
+  card: { background: "#fff", borderRadius: "18px", padding: "24px 20px", border: "1.5px solid #eae7e2" },
+  homeCard: { display: "block", width: "100%", background: "#fff", borderRadius: "18px", padding: "24px 22px", border: "1.5px solid #eae7e2", cursor: "pointer", fontFamily: "inherit", textAlign: "left", transition: "all 0.2s" },
+  serviceCard: { display: "block", width: "100%", background: "#fff", borderRadius: "16px", padding: "16px 18px", border: "1.5px solid #eae7e2", cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s" },
+  btnPrimary: { width: "100%", padding: "18px", fontSize: "16px", fontWeight: 700, color: "#fff", border: "none", borderRadius: "14px", cursor: "pointer", fontFamily: "inherit" },
+  btnOutline: { width: "100%", padding: "16px", fontSize: "14px", fontWeight: 600, background: "#fff", border: "1.5px solid #ddd", borderRadius: "14px", cursor: "pointer", fontFamily: "inherit" },
+};
+
+function FadeIn({ children, delay = 0 }) {
+  const [v, setV] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setV(true), delay); return () => clearTimeout(t); }, [delay]);
+  return <div style={{ opacity: v ? 1 : 0, transform: v ? "translateY(0)" : "translateY(20px)", transition: "all 0.5s cubic-bezier(0.22,1,0.36,1)" }}>{children}</div>;
+}
+
+function Pill({ children, active, color, onClick }) {
+  return <button onClick={onClick} style={{ padding: "8px 18px", borderRadius: "50px", fontSize: "13px", fontWeight: 600, border: active ? "2px solid " + color : "2px solid #e0dcd6", background: active ? color + "10" : "#fff", color: active ? color : "#888", cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s" }}>{children}</button>;
+}
+
+function SafetyBar({ score, color }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <div style={{ flex: 1, height: "8px", borderRadius: "4px", background: "#eee", overflow: "hidden" }}>
+        <div style={{ width: score + "%", height: "100%", borderRadius: "4px", background: score > 90 ? "#4a7c59" : score > 80 ? "#C9A96E" : "#D98B5A", transition: "width 1s ease" }} />
+      </div>
+      <span style={{ fontSize: "14px", fontWeight: 700, color: color }}>{score}%</span>
+    </div>
+  );
+}
+
+function SeverityDot({ level }) {
+  const c = level === "low" ? "#4a7c59" : level === "med" ? "#D4A030" : "#C75050";
+  const l = level === "low" ? "Common & mild" : level === "med" ? "Uncommon" : "Rare";
+  return <span style={{ fontSize: "10px", fontWeight: 700, color: c, textTransform: "uppercase", letterSpacing: "0.5px" }}>{l}</span>;
+}
+
+function OptionBtn({ icon, label, sub, selected, onClick }) {
+  return (
+    <button onClick={onClick} style={{ display: "flex", alignItems: "center", gap: "14px", width: "100%", padding: "18px 20px", border: selected ? "2px solid #2d5a7b" : "2px solid #eae7e2", borderRadius: "14px", background: selected ? "#f4f8fb" : "#fff", cursor: "pointer", textAlign: "left", transition: "all 0.2s", fontFamily: "inherit", outline: "none" }}>
+      <span style={{ fontSize: "24px", flexShrink: 0 }}>{icon}</span>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: "15px", fontWeight: 600, color: "#1a1a1a" }}>{label}</div>
+        {sub && <div style={{ fontSize: "13px", color: "#999", marginTop: "2px" }}>{sub}</div>}
+      </div>
+    </button>
+  );
+}
+
+function ProgressDots({ current, total }) {
+  return (
+    <div style={{ display: "flex", gap: "8px", justifyContent: "center", marginBottom: "28px" }}>
+      {Array.from({ length: total }).map((_, i) => <div key={i} style={{ width: i <= current ? "24px" : "8px", height: "8px", borderRadius: "4px", background: i <= current ? "#2d5a7b" : "#ddd", transition: "all 0.4s" }} />)}
+    </div>
+  );
+}
+
+/* ═══════════════════════ SERVICE GUIDE ═══════════════════════ */
+
+function ServiceGuide({ serviceKey, onBack, onCompare }) {
+  const svc = SERVICES[serviceKey];
+  const [showRisks, setShowRisks] = useState(false);
+  const [activeRiskTab, setActiveRiskTab] = useState("common");
+
+  return (
+    <div>
+      <button onClick={onBack} style={S.back}>← Back</button>
+
+      <FadeIn>
+        <div style={{ textAlign: "center", marginBottom: "8px" }}>
+          <div style={{ marginBottom: "8px" }}><HairConditionHead stage={stageFor(svc.key)} size={100} /></div>
+          <h2 style={{ ...S.serif, fontSize: "30px", marginBottom: "6px" }}>{svc.name}</h2>
+          <div style={{ fontSize: "13px", color: "#aaa", marginBottom: "16px" }}>{svc.full}</div>
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={100}>
+        <div style={{ background: "#fff", borderRadius: "18px", padding: "12px 16px", border: "1px solid #eee", marginBottom: "20px", textAlign: "center" }}>
+          <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "#bbb", marginBottom: "4px" }}>Visual Results</div>
+          <BeforeAfterHead type={svc.beforeAfterType} />
+          <div style={{ fontSize: "12px", color: "#999", lineHeight: 1.5, padding: "0 8px 8px" }}>Illustration showing typical improvement. Individual results vary.</div>
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={200}>
+        <div style={{ ...S.card, marginBottom: "16px" }}>
+          <h3 style={{ fontSize: "17px", fontWeight: 700, marginBottom: "10px" }}>What is this, in plain terms?</h3>
+          <p style={{ fontSize: "15px", color: "#555", lineHeight: 1.75 }}>{svc.heroDesc}</p>
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={300}>
+        <div style={{ ...S.card, marginBottom: "16px" }}>
+          <h3 style={{ fontSize: "17px", fontWeight: 700, marginBottom: "20px" }}>How it works — step by step</h3>
+          {svc.steps.map((s, i) => (
+            <div key={i} style={{ display: "flex", gap: "14px", marginBottom: i < 3 ? "20px" : 0 }}>
+              <div style={{ width: "40px", height: "40px", borderRadius: "12px", background: svc.light, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", flexShrink: 0 }}>{s.icon}</div>
+              <div style={{ flex: 1, borderBottom: i < 3 ? "1px solid #f0f0ed" : "none", paddingBottom: i < 3 ? "18px" : 0 }}>
+                <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a", marginBottom: "4px" }}><span style={{ color: svc.color, marginRight: "6px" }}>Step {i + 1}.</span>{s.title}</div>
+                <p style={{ fontSize: "13px", color: "#777", lineHeight: 1.6, margin: 0 }}>{s.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={400}>
+        <div style={{ ...S.card, marginBottom: "16px" }}>
+          <h3 style={{ fontSize: "17px", fontWeight: 700, marginBottom: "16px" }}>What to expect</h3>
+          {svc.expect.map((e, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: i < svc.expect.length - 1 ? "1px solid #f5f3f0" : "none" }}>
+              <div><div style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a" }}>{e.l}</div><div style={{ fontSize: "12px", color: "#aaa", marginTop: "2px" }}>{e.d}</div></div>
+              <div style={{ fontSize: "15px", fontWeight: 700, color: svc.color }}>{e.v}</div>
+            </div>
+          ))}
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={500}>
+        <div style={{ ...S.card, marginBottom: "16px", border: "1.5px solid " + (showRisks ? svc.color + "30" : "#eae7e2") }}>
+          <button onClick={() => setShowRisks(!showRisks)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", padding: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <span style={{ fontSize: "22px" }}>🛡️</span>
+              <div style={{ textAlign: "left" }}><h3 style={{ fontSize: "17px", fontWeight: 700, margin: 0 }}>Safety & Side Effects</h3><div style={{ fontSize: "12px", color: "#999", marginTop: "2px" }}>Honest, no-nonsense breakdown</div></div>
+            </div>
+            <span style={{ fontSize: "18px", color: "#999", transition: "transform 0.3s", transform: showRisks ? "rotate(180deg)" : "rotate(0)" }}>▼</span>
+          </button>
+          {showRisks && (
+            <div style={{ marginTop: "20px" }}>
+              <div style={{ background: "#faf9f7", borderRadius: "12px", padding: "16px", marginBottom: "18px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                  <span style={{ fontSize: "13px", fontWeight: 700 }}>Safety Score</span>
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: svc.risks.safetyScore > 90 ? "#4a7c59" : svc.risks.safetyScore > 80 ? "#9B7B30" : "#C07040", background: svc.risks.safetyScore > 90 ? "#e8f0e4" : svc.risks.safetyScore > 80 ? "#fef5e0" : "#fdeee4", padding: "3px 10px", borderRadius: "50px" }}>{svc.risks.safetyLabel}</span>
+                </div>
+                <SafetyBar score={svc.risks.safetyScore} color={svc.color} />
+              </div>
+              <div style={{ display: "flex", gap: "8px", marginBottom: "16px", flexWrap: "wrap" }}>
+                <Pill active={activeRiskTab === "common"} color={svc.color} onClick={() => setActiveRiskTab("common")}>Common ({svc.risks.common.length})</Pill>
+                <Pill active={activeRiskTab === "uncommon"} color={svc.color} onClick={() => setActiveRiskTab("uncommon")}>Uncommon ({svc.risks.uncommon.length})</Pill>
+                <Pill active={activeRiskTab === "rare"} color={svc.color} onClick={() => setActiveRiskTab("rare")}>Rare ({svc.risks.rare.length})</Pill>
+              </div>
+              <div style={{ marginBottom: "18px" }}>
+                {svc.risks[activeRiskTab].map((r, i) => (
+                  <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "12px 0", borderBottom: "1px solid #f5f3f0" }}>
+                    <div style={{ flex: 1 }}><div style={{ fontSize: "14px", fontWeight: 600, color: "#333", marginBottom: "4px" }}>{r.effect}</div><div style={{ fontSize: "12px", color: "#999" }}>Duration: {r.duration}</div></div>
+                    <SeverityDot level={r.severity} />
+                  </div>
+                ))}
+              </div>
+              <div style={{ background: "#faf9f7", borderRadius: "12px", padding: "16px", marginBottom: "14px", borderLeft: "3px solid " + svc.color }}>
+                <div style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: svc.color, marginBottom: "8px" }}>The honest truth</div>
+                <p style={{ fontSize: "14px", color: "#555", lineHeight: 1.7, margin: 0 }}>{svc.risks.truthBomb}</p>
+              </div>
+              <div style={{ background: "#fef7f5", borderRadius: "12px", padding: "16px", borderLeft: "3px solid #D98B5A" }}>
+                <div style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: "#C07040", marginBottom: "8px" }}>When this won't work</div>
+                <p style={{ fontSize: "14px", color: "#666", lineHeight: 1.7, margin: 0 }}>{svc.risks.notAFit}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={600}>
+        <div style={{ background: svc.light, borderRadius: "14px", padding: "18px 20px", marginBottom: "20px" }}>
+          <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.5px", color: svc.color, marginBottom: "6px" }}>Ideal for</div>
+          <div style={{ fontSize: "15px", fontWeight: 600, marginBottom: "4px" }}>{svc.bestFor}</div>
+          <div style={{ fontSize: "13px", color: "#666", lineHeight: 1.6 }}>{svc.idealUser}</div>
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={700}>
+        <button onClick={onCompare} style={{ ...S.btnOutline, color: svc.color, borderColor: svc.color + "40", marginBottom: "12px" }}>Compare with other treatments →</button>
+        <button style={{ ...S.btnPrimary, background: svc.color, boxShadow: "0 6px 24px " + svc.color + "30" }}>Book a free consultation</button>
+      </FadeIn>
+    </div>
+  );
+}
+
+/* ═══════════════════════ COMPARISON TOOL ═══════════════════════ */
+
+function ComparisonTool({ onBack, onGuide }) {
+  const svcList = [SERVICES.gfc, SERVICES.prp, SERVICES.transplant];
+  const factors = [
+    { label: "Best for", key: "bestFor" },
+    { label: "How invasive", key: "invasive", fromComp: true },
+    { label: "Sessions needed", key: "sessions", fromComp: true },
+    { label: "Time to see results", key: "results", fromComp: true },
+    { label: "How permanent", key: "permanence", fromComp: true },
+    { label: "Cost range", key: "cost", fromComp: true },
+  ];
+  const riskFactors = [
+    { label: "Pain level", key: "pain" },
+    { label: "Risk level", key: "risk" },
+    { label: "Downtime", key: "downtime" },
+  ];
+  const painLabels = ["", "Very Low", "Low–Moderate", "Moderate"];
+  const riskLabels = ["", "Very Low", "Low–Moderate", "Moderate"];
+  const downtimeLabels = ["None", "Minimal (1 day)", "", "7–10 days recovery"];
+
+  function renderBar(value, max, color) {
+    return <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>{Array.from({ length: max }).map((_, i) => <div key={i} style={{ width: "16px", height: "8px", borderRadius: "2px", background: i < value ? color : "#eee", transition: "all 0.3s" }} />)}</div>;
+  }
+
+  return (
+    <div>
+      <button onClick={onBack} style={S.back}>← Back</button>
+      <FadeIn><div style={{ textAlign: "center", marginBottom: "28px" }}><h2 style={{ ...S.serif, fontSize: "26px", marginBottom: "8px" }}>Compare All Treatments</h2><p style={{ fontSize: "14px", color: "#999" }}>Every factor, side by side. No hidden details.</p></div></FadeIn>
+
+      <FadeIn delay={100}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", marginBottom: "20px" }}>
+          {svcList.map((s) => (
+            <button key={s.key} onClick={() => onGuide(s.key)} style={{ background: "#fff", borderRadius: "14px", padding: "14px 6px 12px", border: "1.5px solid " + s.color + "20", cursor: "pointer", textAlign: "center", fontFamily: "inherit", transition: "all 0.2s" }}>
+              <HairConditionHead stage={stageFor(s.key)} size={90} />
+              <div style={{ fontSize: "12px", fontWeight: 700, color: s.color, marginTop: "8px" }}>{s.name}</div>
+              <div style={{ fontSize: "10px", color: "#bbb", marginTop: "3px" }}>Tap for full guide</div>
+            </button>
+          ))}
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={200}>
+        <div style={{ ...S.card, marginBottom: "16px" }}>
+          <h3 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "18px" }}>Treatment Overview</h3>
+          {factors.map((f, fi) => (
+            <div key={fi} style={{ marginBottom: fi < factors.length - 1 ? "18px" : 0, paddingBottom: fi < factors.length - 1 ? "18px" : 0, borderBottom: fi < factors.length - 1 ? "1px solid #f3f1ed" : "none" }}>
+              <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.2px", color: "#bbb", marginBottom: "10px" }}>{f.label}</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
+                {svcList.map((s) => <div key={s.key} style={{ fontSize: "13px", color: "#444", lineHeight: 1.5 }}><span style={{ fontSize: "10px", fontWeight: 700, color: s.color, display: "block", marginBottom: "3px" }}>{s.icon}</span>{f.fromComp ? s.comp[f.key] : s[f.key]}</div>)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={350}>
+        <div style={{ ...S.card, marginBottom: "16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "18px" }}><span style={{ fontSize: "20px" }}>🛡️</span><h3 style={{ fontSize: "15px", fontWeight: 700, margin: 0 }}>Risk & Comfort Comparison</h3></div>
+          {riskFactors.map((f, fi) => (
+            <div key={fi} style={{ marginBottom: fi < riskFactors.length - 1 ? "22px" : 0 }}>
+              <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.2px", color: "#bbb", marginBottom: "12px" }}>{f.label}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                {svcList.map((s) => {
+                  const val = s.comp[f.key];
+                  const label = f.key === "pain" ? painLabels[val] : f.key === "risk" ? riskLabels[val] : downtimeLabels[val];
+                  return <div key={s.key} style={{ display: "flex", alignItems: "center", gap: "10px" }}><span style={{ fontSize: "12px", fontWeight: 700, color: s.color, width: "60px", flexShrink: 0 }}>{s.icon} {s.name.split(" ")[0]}</span>{renderBar(val, 3, val <= 1 ? "#4a7c59" : val === 2 ? "#D4A030" : "#C07040")}<span style={{ fontSize: "12px", color: "#888" }}>{label}</span></div>;
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={450}>
+        <div style={{ ...S.card, marginBottom: "16px" }}>
+          <h3 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "18px" }}>Safety Scores</h3>
+          {svcList.map((s, i) => (
+            <div key={s.key} style={{ marginBottom: i < 2 ? "16px" : 0 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                <span style={{ fontSize: "13px", fontWeight: 700, color: s.color }}>{s.icon} {s.name}</span>
+                <span style={{ fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: "50px", color: s.risks.safetyScore > 90 ? "#4a7c59" : s.risks.safetyScore > 80 ? "#9B7B30" : "#C07040", background: s.risks.safetyScore > 90 ? "#e8f0e4" : s.risks.safetyScore > 80 ? "#fef5e0" : "#fdeee4" }}>{s.risks.safetyLabel}</span>
+              </div>
+              <SafetyBar score={s.risks.safetyScore} color={s.color} />
+            </div>
+          ))}
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={550}>
+        <div style={{ ...S.card, marginBottom: "16px" }}>
+          <h3 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "16px" }}>Side Effects at a Glance</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
+            {svcList.map((s) => (
+              <div key={s.key} style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "13px", fontWeight: 700, color: s.color, marginBottom: "10px" }}>{s.icon} {s.name.split(" ")[0]}</div>
+                {[{k:"common",l:"Common",c:"#4a7c59"},{k:"uncommon",l:"Uncommon",c:"#D4A030"},{k:"rare",l:"Rare",c:"#C07040"}].map(({k,l,c}) => (
+                  <div key={k} style={{ background: "#f0eeea", borderRadius: "10px", padding: "12px 8px", marginTop: "6px" }}>
+                    <div style={{ fontSize: "10px", fontWeight: 600, color: c, marginBottom: "4px" }}>{l}</div>
+                    <div style={{ fontSize: "18px", fontWeight: 700 }}>{s.risks[k].length}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={650}>
+        <div style={{ ...S.card, marginBottom: "24px" }}>
+          <h3 style={{ fontSize: "15px", fontWeight: 700, marginBottom: "16px" }}>The Honest Truth</h3>
+          {svcList.map((s, i) => (
+            <div key={s.key} style={{ background: "#faf9f7", borderRadius: "12px", padding: "16px", marginBottom: i < 2 ? "12px" : 0, borderLeft: "3px solid " + s.color }}>
+              <div style={{ fontSize: "12px", fontWeight: 700, color: s.color, marginBottom: "6px" }}>{s.icon} {s.name}</div>
+              <p style={{ fontSize: "13px", color: "#666", lineHeight: 1.65, margin: 0 }}>{s.risks.truthBomb}</p>
+            </div>
+          ))}
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={750}><button style={{ ...S.btnPrimary, background: "#2d5a7b" }}>Still unsure? Talk to a specialist — it's free</button></FadeIn>
+    </div>
+  );
+}
+
+/* ═══════════════════════ MAIN APP ═══════════════════════ */
+
+const V = { HOME: "home", Q1: "q1", Q2: "q2", Q3: "q3", QR: "qr", GUIDE: "guide", COMPARE: "compare" };
+
+function HairHub() {
+  const [view, setView] = useState(V.HOME);
+  const [ans, setAns] = useState({});
+  const [rec, setRec] = useState(null);
+  const [guideKey, setGuideKey] = useState(null);
+
+  const go = (v) => { setView(v); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const pick = (k, val, next) => { const u = { ...ans, [k]: val }; setAns(u); setTimeout(() => { if (next === V.QR) setRec(getRecommendation(u)); go(next); }, 200); };
+  const openGuide = (key) => { setGuideKey(key); go(V.GUIDE); };
+  const restart = () => { go(V.HOME); setAns({}); setRec(null); };
+
+  return (
+    <div style={{ maxWidth: "540px", margin: "0 auto", padding: "36px 20px 80px" }}>
+      <div style={{ textAlign: "center", marginBottom: "12px" }}><div style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: "#ccc", fontWeight: 500 }}>Hair Restoration Hub</div></div>
+
+      {(view === V.Q1 || view === V.Q2 || view === V.Q3) && <ProgressDots current={[V.Q1, V.Q2, V.Q3].indexOf(view)} total={3} />}
+
+      {/* HOME */}
+      {view === V.HOME && (
+        <div>
+          <FadeIn>
+            <div style={{ textAlign: "center", padding: "32px 0 36px" }}>
+              <h1 style={{ ...S.serif, fontSize: "30px", lineHeight: 1.3, marginBottom: "12px" }}>Your hair journey<br />starts here.</h1>
+              <p style={{ fontSize: "15px", color: "#888", lineHeight: 1.7, maxWidth: "380px", margin: "0 auto" }}>Understand your options. See the real facts.<br />Make a decision you feel good about.</p>
+            </div>
+          </FadeIn>
+          <FadeIn delay={150}>
+            <button onClick={() => go(V.Q1)} style={{ ...S.homeCard, borderLeft: "4px solid #2d5a7b" }}>
+              <div style={{ fontSize: "28px", marginBottom: "10px" }}>🧭</div>
+              <h3 style={{ fontSize: "17px", fontWeight: 700, marginBottom: "4px" }}>Help me decide</h3>
+              <p style={{ fontSize: "13px", color: "#999", lineHeight: 1.5, margin: 0 }}>Answer 3 simple questions. We'll recommend what fits you.</p>
+              <div style={{ fontSize: "12px", color: "#2d5a7b", fontWeight: 600, marginTop: "12px" }}>30 seconds →</div>
+            </button>
+          </FadeIn>
+          <FadeIn delay={250}>
+            <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "#ccc", margin: "24px 0 14px", textAlign: "center" }}>Or explore each treatment</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {Object.values(SERVICES).map((s) => (
+                <button key={s.key} onClick={() => openGuide(s.key)} style={{ ...S.serviceCard }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                    <div style={{ width: "60px", flexShrink: 0 }}><HairConditionHead stage={stageFor(s.key)} size={60} /></div>
+                    <div style={{ textAlign: "left", flex: 1 }}><div style={{ fontSize: "15px", fontWeight: 700, color: "#1a1a1a" }}>{s.name}</div><div style={{ fontSize: "12px", color: "#999", lineHeight: 1.5, marginTop: "2px" }}>{s.oneLiner}</div></div>
+                    <span style={{ color: "#ccc", fontSize: "18px", flexShrink: 0 }}>›</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </FadeIn>
+          <FadeIn delay={400}>
+            <button onClick={() => go(V.COMPARE)} style={{ ...S.homeCard, borderLeft: "4px solid #C9A96E", marginTop: "16px" }}>
+              <div style={{ fontSize: "28px", marginBottom: "10px" }}>⚖️</div>
+              <h3 style={{ fontSize: "17px", fontWeight: 700, marginBottom: "4px" }}>Compare all treatments</h3>
+              <p style={{ fontSize: "13px", color: "#999", lineHeight: 1.5, margin: 0 }}>See every factor side by side — results, risks, cost, downtime, everything.</p>
+              <div style={{ fontSize: "12px", color: "#C9A96E", fontWeight: 600, marginTop: "12px" }}>Full comparison →</div>
+            </button>
+          </FadeIn>
+        </div>
+      )}
+
+      {/* QUIZ */}
+      {view === V.Q1 && <FadeIn><button onClick={() => go(V.HOME)} style={S.back}>← Back</button><h2 style={{ ...S.serif, fontSize: "26px", marginBottom: "8px" }}>What are you noticing?</h2><p style={{ color: "#999", fontSize: "14px", marginBottom: "24px" }}>Pick what fits you best.</p><div style={{ display: "flex", flexDirection: "column", gap: "12px" }}><OptionBtn icon="🚿" label="Hair falling more than usual" sub="More on pillow, shower, or comb" onClick={() => pick("noticing","falling",V.Q2)} /><OptionBtn icon="🔍" label="Hair getting thinner overall" sub="Less volume, scalp more visible" onClick={() => pick("noticing","thinning",V.Q2)} /><OptionBtn icon="⭕" label="Bald patches or spots" sub="Areas where hair stopped growing" onClick={() => pick("noticing","patches",V.Q2)} /><OptionBtn icon="📐" label="Hairline moving back" sub="Forehead bigger, temples receding" onClick={() => pick("noticing","receding",V.Q2)} /></div></FadeIn>}
+
+      {view === V.Q2 && <FadeIn><button onClick={() => go(V.Q1)} style={S.back}>← Back</button><h2 style={{ ...S.serif, fontSize: "26px", marginBottom: "8px" }}>How long has this been going on?</h2><p style={{ color: "#999", fontSize: "14px", marginBottom: "24px" }}>Helps us understand what stage you're at.</p><div style={{ display: "flex", flexDirection: "column", gap: "12px" }}><OptionBtn icon="🌤" label="Just started noticing" sub="Past few weeks" onClick={() => pick("duration","recent",V.Q3)} /><OptionBtn icon="🌥" label="A few months now" sub="2–6 months" onClick={() => pick("duration","months",V.Q3)} /><OptionBtn icon="☁️" label="Over a year" sub="Been dealing with it a while" onClick={() => pick("duration","year",V.Q3)} /><OptionBtn icon="🌧" label="Several years" sub="It's been a long journey" onClick={() => pick("duration","years",V.Q3)} /></div></FadeIn>}
+
+      {view === V.Q3 && <FadeIn><button onClick={() => go(V.Q2)} style={S.back}>← Back</button><h2 style={{ ...S.serif, fontSize: "26px", marginBottom: "8px" }}>What matters most to you?</h2><p style={{ color: "#999", fontSize: "14px", marginBottom: "24px" }}>What would success look like?</p><div style={{ display: "flex", flexDirection: "column", gap: "12px" }}><OptionBtn icon="🛡" label="Stop the hair fall" sub="Keep what I have" onClick={() => pick("goal","stop",V.QR)} /><OptionBtn icon="💫" label="Get thickness back" sub="Fuller, denser hair" onClick={() => pick("goal","thicken",V.QR)} /><OptionBtn icon="🎯" label="Fill in bald areas" sub="Hair where it's completely gone" onClick={() => pick("goal","fill",V.QR)} /></div></FadeIn>}
+
+      {/* QUIZ RESULT */}
+      {view === V.QR && rec && (() => {
+        const p = SERVICES[rec.primary], alt = SERVICES[rec.secondary];
+        return (
+          <div>
+            <FadeIn>
+              <button onClick={() => go(V.Q3)} style={S.back}>← Back</button>
+              <div style={{ textAlign: "center", marginBottom: "24px" }}>
+                <div style={{ display: "inline-block", padding: "6px 18px", background: p.light, color: p.color, borderRadius: "50px", fontSize: "11px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "16px" }}>Recommended for you</div>
+                <h2 style={{ ...S.serif, fontSize: "28px", marginBottom: "6px" }}>{p.name}</h2>
+                <p style={{ fontSize: "15px", color: "#777", lineHeight: 1.7, maxWidth: "420px", margin: "0 auto" }}>{p.oneLiner}</p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={150}><div style={{ background: "#fff", borderRadius: "18px", padding: "12px", border: "1px solid #eee", marginBottom: "16px" }}><BeforeAfterHead type={p.beforeAfterType} /></div></FadeIn>
+            <FadeIn delay={250}><button onClick={() => openGuide(rec.primary)} style={{ ...S.btnPrimary, background: p.color, boxShadow: "0 6px 24px " + p.color + "30", marginBottom: "12px" }}>See full guide for {p.name} →</button></FadeIn>
+            <FadeIn delay={350}>
+              <div style={{ ...S.card, marginBottom: "16px" }}>
+                <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.5px", color: "#ccc", marginBottom: "12px" }}>Also worth exploring</div>
+                <button onClick={() => openGuide(rec.secondary)} style={{ display: "flex", alignItems: "center", gap: "14px", width: "100%", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", padding: 0, textAlign: "left" }}>
+                  <div style={{ width: "52px", flexShrink: 0 }}><HairConditionHead stage={stageFor(rec.secondary)} size={52} /></div>
+                  <div style={{ flex: 1 }}><div style={{ fontSize: "15px", fontWeight: 700 }}>{alt.name}</div><div style={{ fontSize: "12px", color: "#999" }}>{alt.bestFor}</div></div>
+                  <span style={{ color: "#ccc", fontSize: "18px" }}>›</span>
+                </button>
+              </div>
+            </FadeIn>
+            <FadeIn delay={450}>
+              <button onClick={() => go(V.COMPARE)} style={{ ...S.btnOutline, color: "#666", borderColor: "#ddd", marginBottom: "12px" }}>⚖️  Compare all three treatments</button>
+              <button onClick={restart} style={{ width: "100%", padding: "14px", fontSize: "14px", fontWeight: 500, color: "#aaa", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>Start over</button>
+            </FadeIn>
+          </div>
+        );
+      })()}
+
+      {view === V.GUIDE && guideKey && <ServiceGuide serviceKey={guideKey} onBack={() => go(V.HOME)} onCompare={() => go(V.COMPARE)} />}
+      {view === V.COMPARE && <ComparisonTool onBack={() => go(V.HOME)} onGuide={(key) => openGuide(key)} />}
+    </div>
+  );
+}
+
+ReactDOM.render(<HairHub />, document.getElementById("root"));
+</script>
+</body>
+</html>
