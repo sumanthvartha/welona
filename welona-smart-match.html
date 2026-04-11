@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welona — Find Your Match</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --deep: #111A16;
+  --forest: #1E3328;
+  --forest-mid: #2C4A3E;
+  --forest-light: #3D6356;
+  --terra: #C4855A;
+  --terra-light: #E8B08A;
+  --terra-pale: rgba(196,133,90,0.12);
+  --cream: #FAF6EF;
+  --cream-mid: #EDE5D8;
+  --cream-dim: rgba(250,246,239,0.65);
+  --gold: #D4A853;
+  --ink: #1A1A18;
+  --muted: rgba(250,246,239,0.5);
+  --border-light: rgba(250,246,239,0.1);
+  --border-mid: rgba(250,246,239,0.18);
+  --r: 14px;
+  --r-lg: 20px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--deep);
+  color: var(--cream);
+  font-size: 15px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── NAV ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 48px;
+  background: rgba(17,26,22,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-light);
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; font-weight: 500; color: var(--cream);
+  text-decoration: none; letter-spacing: .04em;
+}
+.logo span { color: var(--terra); }
+.topbar-nav { display: flex; gap: 8px; }
+.tab-btn {
+  padding: 9px 22px; border-radius: 40px; font-size: 13px;
+  font-weight: 400; cursor: pointer; transition: all .25s;
+  border: 1px solid var(--border-mid); color: var(--muted);
+  background: transparent; font-family: 'DM Sans', sans-serif;
+  letter-spacing: .02em;
+}
+.tab-btn.active {
+  background: var(--terra); color: #fff; border-color: var(--terra);
+}
+.tab-btn:hover:not(.active) {
+  color: var(--cream); border-color: rgba(250,246,239,0.35);
+}
+
+/* ── PAGES ── */
+.page { display: none; padding-top: 80px; min-height: 100vh; }
+.page.active { display: block; }
+
+/* ── QUIZ PAGE ── */
+.quiz-wrap {
+  min-height: calc(100vh - 80px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 24px;
+  position: relative; overflow: hidden;
+}
+.quiz-bg-orb {
+  position: absolute; border-radius: 50%;
+  pointer-events: none; filter: blur(80px);
+}
+.orb1 { width: 500px; height: 500px; background: rgba(44,74,62,0.3); top: -100px; right: -150px; }
+.orb2 { width: 350px; height: 350px; background: rgba(196,133,90,0.08); bottom: -80px; left: -80px; }
+
+.quiz-progress {
+  display: flex; gap: 6px; margin-bottom: 48px;
+  position: relative; z-index: 1;
+}
+.prog-dot {
+  height: 3px; border-radius: 2px;
+  background: var(--border-mid); transition: all .4s;
+}
+.prog-dot.done { background: var(--terra); }
+.prog-dot.active { background: var(--terra-light); }
+
+.quiz-slide {
+  display: none; flex-direction: column; align-items: center;
+  text-align: center; max-width: 680px; width: 100%;
+  position: relative; z-index: 1;
+  animation: slide-in .45s cubic-bezier(.22,.68,0,1.2);
+}
+.quiz-slide.active { display: flex; }
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(22px) scale(.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+.q-eyebrow {
+  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 16px; font-weight: 500;
+}
+.q-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 400; line-height: 1.15; color: var(--cream);
+  margin-bottom: 10px;
+}
+.q-sub {
+  font-size: 14px; color: var(--muted); margin-bottom: 36px; line-height: 1.65;
+}
+.q-options {
+  display: grid; gap: 12px; width: 100%;
+}
+.q-options.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.q-options.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.q-options.cols-auto { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+
+.q-opt {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r); padding: 20px 16px;
+  cursor: pointer; transition: all .2s;
+  text-align: center; position: relative; overflow: hidden;
+}
+.q-opt::after {
+  content: ''; position: absolute; inset: 0;
+  background: var(--terra); opacity: 0; transition: opacity .2s;
+}
+.q-opt:hover { border-color: rgba(196,133,90,0.5); transform: translateY(-2px); }
+.q-opt:hover::after { opacity: 0.06; }
+.q-opt.selected { border-color: var(--terra); background: var(--terra-pale); }
+.q-opt.selected .q-opt-icon { transform: scale(1.1); }
+.q-opt-icon { font-size: 28px; margin-bottom: 10px; display: block; transition: transform .2s; }
+.q-opt-label { font-size: 14px; font-weight: 500; color: var(--cream); display: block; }
+.q-opt-sub { font-size: 12px; color: var(--muted); margin-top: 3px; display: block; }
+
+/* duration options */
+.q-opt-dur {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r); padding: 16px 20px;
+  cursor: pointer; transition: all .2s;
+  text-align: left; display: flex; align-items: center; gap: 14px;
+}
+.q-opt-dur:hover { border-color: rgba(196,133,90,0.5); }
+.q-opt-dur.selected { border-color: var(--terra); background: var(--terra-pale); }
+.dur-ring {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid var(--border-mid); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.q-opt-dur.selected .dur-ring { border-color: var(--terra); background: var(--terra); }
+.dur-check { display: none; color: #fff; font-size: 14px; }
+.q-opt-dur.selected .dur-check { display: block; }
+.dur-yrs { font-size: 18px; font-family: 'Cormorant Garamond', serif; color: var(--terra); }
+.q-opt-dur.selected .dur-yrs { display: none; }
+.dur-text { flex: 1; }
+.dur-title { font-size: 14px; color: var(--cream); font-weight: 500; }
+.dur-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* fear options */
+.q-opt-fear {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r); padding: 16px 18px;
+  cursor: pointer; transition: all .2s; text-align: left;
+}
+.q-opt-fear:hover { border-color: rgba(196,133,90,0.5); }
+.q-opt-fear.selected { border-color: var(--terra); background: var(--terra-pale); }
+.fear-label { font-size: 14px; color: var(--cream); font-weight: 500; display: block; }
+.fear-sub { font-size: 12px; color: var(--muted); margin-top: 3px; display: block; }
+
+/* preference options */
+.pref-group { margin-bottom: 24px; width: 100%; }
+.pref-group-label {
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px; text-align: left;
+}
+.pref-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pref-pill {
+  padding: 9px 20px; border-radius: 40px; font-size: 13px;
+  border: 1px solid var(--border-mid); color: var(--muted);
+  background: transparent; cursor: pointer; transition: all .2s;
+}
+.pref-pill:hover { color: var(--cream); border-color: rgba(250,246,239,0.35); }
+.pref-pill.selected { background: var(--terra); color: #fff; border-color: var(--terra); }
+
+.q-next {
+  margin-top: 28px; padding: 14px 40px; border-radius: 40px;
+  background: var(--terra); color: #fff;
+  font-size: 15px; font-weight: 500; border: none; cursor: pointer;
+  transition: all .2s; display: flex; align-items: center; gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+}
+.q-next:hover { background: #d4956a; transform: translateY(-1px); }
+.q-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* ── MATCHING SCREEN ── */
+.matching-screen {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center; min-height: 60vh;
+  position: relative; z-index: 1;
+}
+.match-ring-wrap {
+  position: relative; width: 120px; height: 120px; margin-bottom: 32px;
+}
+.match-ring {
+  width: 120px; height: 120px; border-radius: 50%;
+  border: 2px solid var(--border-mid);
+  border-top-color: var(--terra); border-right-color: var(--terra-light);
+  animation: spin 1.2s linear infinite;
+  position: absolute;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.match-logo-inner {
+  position: absolute; inset: 12px; border-radius: 50%;
+  background: rgba(196,133,90,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+}
+.match-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; margin-bottom: 8px;
+}
+.match-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+.match-step {
+  font-size: 13px; color: var(--muted); display: flex; align-items: center;
+  justify-content: center; gap: 8px; opacity: 0;
+  transition: opacity .5s;
+}
+.match-step.visible { opacity: 1; }
+.match-step-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--terra); }
+
+/* ── RESULTS ── */
+.results-wrap {
+  max-width: 900px; margin: 0 auto; padding: 40px 24px 80px;
+  position: relative; z-index: 1;
+}
+.results-header { text-align: center; margin-bottom: 48px; }
+.results-eyebrow {
+  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 12px;
+}
+.results-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 4vw, 52px); font-weight: 400; line-height: 1.1;
+  color: var(--cream);
+}
+.results-sub { font-size: 15px; color: var(--muted); margin-top: 12px; }
+.match-score {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(196,133,90,0.15); border: 1px solid rgba(196,133,90,0.3);
+  border-radius: 40px; padding: 7px 18px; margin-top: 16px;
+  font-size: 13px; color: var(--terra-light);
+}
+.match-score-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--terra); }
+
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+
+/* Peer Match Card */
+.peer-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r-lg); overflow: hidden;
+  transition: transform .25s, border-color .25s;
+}
+.peer-card:hover { transform: translateY(-3px); border-color: rgba(196,133,90,0.4); }
+.peer-card-hero {
+  height: 200px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  background: linear-gradient(135deg, rgba(44,74,62,0.8), rgba(30,51,40,0.9));
+}
+.peer-play-btn {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--terra); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .2s; position: relative; z-index: 1;
+}
+.peer-play-btn:hover { transform: scale(1.08); }
+.peer-card-tags {
+  position: absolute; top: 14px; left: 14px; display: flex; gap: 6px;
+}
+.peer-tag {
+  padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
+}
+.peer-tag-t { background: var(--terra); color: #fff; }
+.peer-tag-l { background: rgba(250,246,239,0.15); color: var(--cream); border: 1px solid rgba(250,246,239,0.2); }
+.peer-match-badge {
+  position: absolute; top: 14px; right: 14px;
+  background: var(--gold); color: var(--deep);
+  padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
+}
+.peer-card-body { padding: 20px; }
+.peer-identity { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.peer-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 17px; color: #fff;
+  flex-shrink: 0;
+}
+.peer-name { font-size: 15px; font-weight: 500; }
+.peer-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.peer-quote {
+  font-size: 13px; color: var(--muted); line-height: 1.65;
+  border-left: 2px solid var(--terra); padding-left: 12px;
+  font-style: italic; margin-bottom: 16px;
+}
+.peer-stats { display: flex; gap: 20px; margin-bottom: 16px; }
+.peer-stat strong { display: block; font-size: 15px; color: var(--cream); }
+.peer-stat span { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.peer-actions { display: flex; gap: 8px; }
+.btn-watch {
+  flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 500;
+  background: var(--terra); color: #fff; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: background .2s; font-family: 'DM Sans', sans-serif;
+}
+.btn-watch:hover { background: #d4956a; }
+.btn-talk {
+  flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 500;
+  background: transparent; color: var(--terra-light);
+  border: 1px solid rgba(196,133,90,0.4); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all .2s; font-family: 'DM Sans', sans-serif;
+}
+.btn-talk:hover { background: var(--terra-pale); }
+
+/* Recommendation Card */
+.reco-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r-lg); padding: 28px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.reco-label {
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.reco-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; color: var(--cream); line-height: 1.2;
+}
+.reco-body { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.reco-points { display: flex; flex-direction: column; gap: 10px; }
+.reco-point { display: flex; gap: 10px; align-items: flex-start; }
+.rp-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--terra-pale); border: 1px solid rgba(196,133,90,0.3);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+.rp-dot::after {
+  content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--terra);
+}
+.reco-point-text { font-size: 13px; color: var(--muted); }
+.reco-point-text strong { color: var(--cream); display: block; font-size: 14px; margin-bottom: 1px; }
+.reco-cta {
+  width: 100%; padding: 13px; border-radius: 10px;
+  background: var(--forest-mid); color: var(--cream);
+  font-size: 14px; font-weight: 500; border: 1px solid var(--border-mid);
+  cursor: pointer; transition: all .2s; font-family: 'DM Sans', sans-serif;
+  margin-top: auto;
+}
+.reco-cta:hover { background: var(--forest-light); }
+
+/* Fear Insight */
+.insight-strip {
+  background: rgba(196,133,90,0.08);
+  border: 1px solid rgba(196,133,90,0.2);
+  border-radius: var(--r); padding: 20px 24px;
+  display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px;
+}
+.insight-icon { font-size: 24px; flex-shrink: 0; padding-top: 2px; }
+.insight-title { font-size: 14px; font-weight: 500; color: var(--cream); margin-bottom: 4px; }
+.insight-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* More matches */
+.more-matches { margin-top: 8px; }
+.more-label {
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+}
+.more-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+.more-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-mid);
+  border-radius: 10px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; transition: all .2s; flex: 1; min-width: 180px;
+}
+.more-card:hover { border-color: rgba(196,133,90,0.4); background: var(--terra-pale); }
+.more-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 14px; color: #fff; flex-shrink: 0;
+}
+.more-name { font-size: 13px; font-weight: 500; }
+.more-detail { font-size: 11px; color: var(--muted); }
+
+.retake-btn {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--muted); cursor: pointer;
+  background: none; border: none; font-family: 'DM Sans', sans-serif;
+  transition: color .2s; margin: 0 auto; padding: 8px;
+}
+.retake-btn:hover { color: var(--cream); }
+
+/* ── AI ANALYSER PAGE ── */
+.ai-wrap {
+  max-width: 860px; margin: 0 auto; padding: 60px 24px 80px;
+}
+.ai-header { text-align: center; margin-bottom: 48px; }
+.ai-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(196,133,90,0.12); border: 1px solid rgba(196,133,90,0.25);
+  border-radius: 40px; padding: 7px 16px; margin-bottom: 20px;
+  font-size: 12px; color: var(--terra-light); font-weight: 500;
+}
+.ai-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--terra); animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+.ai-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 4vw, 52px); font-weight: 400; line-height: 1.1;
+}
+.ai-sub { font-size: 15px; color: var(--muted); margin-top: 12px; max-width: 520px; margin-left: auto; margin-right: auto; }
+.ai-disclaimer {
+  display: inline-block; margin-top: 12px;
+  font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.04);
+  padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border-light);
+}
+
+.ai-upload-zone {
+  border: 1.5px dashed rgba(196,133,90,0.35);
+  border-radius: var(--r-lg);
+  padding: 60px 24px;
+  text-align: center; cursor: pointer;
+  transition: all .25s; position: relative;
+  background: rgba(255,255,255,0.02); margin-bottom: 20px;
+}
+.ai-upload-zone:hover { border-color: var(--terra); background: var(--terra-pale); }
+.ai-upload-zone.has-image { padding: 0; overflow: hidden; border-style: solid; }
+.upload-icon { font-size: 40px; margin-bottom: 16px; }
+.upload-title { font-size: 16px; font-weight: 500; margin-bottom: 6px; }
+.upload-sub { font-size: 13px; color: var(--muted); }
+.upload-preview {
+  display: none; width: 100%; height: 280px; object-fit: cover;
+}
+.upload-preview.visible { display: block; }
+.upload-change {
+  position: absolute; bottom: 16px; right: 16px;
+  background: rgba(17,26,22,0.85); color: var(--cream);
+  padding: 7px 16px; border-radius: 8px; font-size: 12px; cursor: pointer;
+  border: 1px solid var(--border-mid); display: none;
+}
+.upload-change.visible { display: block; }
+#file-input { display: none; }
+
+.ai-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.ai-field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; letter-spacing: .04em; }
+.ai-select {
+  width: 100%; padding: 11px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-mid); border-radius: 10px;
+  color: var(--cream); font-size: 14px; font-family: 'DM Sans', sans-serif;
+  outline: none; cursor: pointer; transition: border-color .2s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(250,246,239,0.4)' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  padding-right: 36px;
+}
+.ai-select:focus { border-color: var(--terra); }
+.ai-select option { background: #1E3328; }
+
+.ai-textarea {
+  width: 100%; padding: 12px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-mid); border-radius: 10px;
+  color: var(--cream); font-size: 14px; font-family: 'DM Sans', sans-serif;
+  outline: none; resize: none; min-height: 80px;
+  transition: border-color .2s; margin-bottom: 16px;
+}
+.ai-textarea:focus { border-color: var(--terra); }
+.ai-textarea::placeholder { color: rgba(250,246,239,0.25); }
+
+.api-key-row {
+  display: flex; gap: 10px; align-items: center; margin-bottom: 20px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-light);
+  border-radius: 10px; padding: 10px 14px;
+}
+.api-key-icon { font-size: 16px; flex-shrink: 0; }
+.api-key-input {
+  flex: 1; background: transparent; border: none;
+  color: var(--cream); font-size: 13px; font-family: 'DM Sans', sans-serif;
+  outline: none;
+}
+.api-key-input::placeholder { color: rgba(250,246,239,0.3); }
+.api-key-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+.ai-analyse-btn {
+  width: 100%; padding: 15px; border-radius: 12px;
+  background: var(--terra); color: #fff;
+  font-size: 16px; font-weight: 500; border: none; cursor: pointer;
+  transition: all .2s; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.ai-analyse-btn:hover { background: #d4956a; transform: translateY(-1px); }
+.ai-analyse-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Analysis States */
+.ai-thinking {
+  display: none; text-align: center; padding: 60px 24px;
+}
+.ai-thinking.visible { display: block; }
+.thinking-ring {
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 2px solid var(--border-mid);
+  border-top-color: var(--terra); border-right-color: var(--terra-light);
+  animation: spin 1s linear infinite;
+  margin: 0 auto 24px;
+}
+.thinking-msg { font-size: 15px; color: var(--muted); }
+.thinking-sub { font-size: 13px; color: rgba(250,246,239,0.3); margin-top: 6px; }
+
+/* Results */
+.ai-results {
+  display: none;
+}
+.ai-results.visible { display: block; }
+.ai-result-header {
+  display: flex; align-items: center; gap: 16px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border-mid);
+  border-radius: var(--r); padding: 20px 24px; margin-bottom: 20px;
+}
+.ai-result-icon { font-size: 32px; }
+.ai-result-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--cream); }
+.ai-result-sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.ai-result-body {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-light);
+  border-radius: var(--r); padding: 24px;
+  font-size: 14px; color: var(--muted); line-height: 1.8;
+  margin-bottom: 20px; white-space: pre-wrap;
+}
+.ai-result-body strong { color: var(--cream); }
+
+.result-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary-terra {
+  flex: 1; padding: 12px 20px; border-radius: 10px;
+  background: var(--terra); color: #fff;
+  font-size: 14px; font-weight: 500; border: none; cursor: pointer;
+  transition: background .2s; font-family: 'DM Sans', sans-serif;
+  min-width: 160px;
+}
+.btn-primary-terra:hover { background: #d4956a; }
+.btn-ghost-light {
+  flex: 1; padding: 12px 20px; border-radius: 10px;
+  background: transparent; color: var(--muted);
+  font-size: 14px; font-weight: 500;
+  border: 1px solid var(--border-mid); cursor: pointer;
+  transition: all .2s; font-family: 'DM Sans', sans-serif;
+  min-width: 160px;
+}
+.btn-ghost-light:hover { color: var(--cream); border-color: rgba(250,246,239,0.35); }
+
+.re-analyse {
+  display: flex; align-items: center; gap: 8px; margin-top: 16px;
+  font-size: 13px; color: var(--muted); cursor: pointer; background: none; border: none;
+  font-family: 'DM Sans', sans-serif; transition: color .2s;
+}
+.re-analyse:hover { color: var(--cream); }
+
+/* Consult modal */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+  align-items: center; justify-content: center; padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+.consult-modal {
+  background: var(--forest); border: 1px solid var(--border-mid);
+  border-radius: var(--r-lg); width: 100%; max-width: 480px; overflow: hidden;
+  animation: modal-in .3s cubic-bezier(.22,.68,0,1.2);
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(.95) translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+.cm-header { background: var(--forest-mid); padding: 28px; }
+.cm-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--cream); margin-bottom: 4px; }
+.cm-sub { font-size: 13px; color: var(--muted); }
+.cm-person {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,0.07); border-radius: 10px; padding: 12px; margin-top: 16px;
+}
+.cm-avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 16px; color: #fff; flex-shrink: 0; }
+.cm-pname { font-size: 14px; color: var(--cream); font-weight: 500; }
+.cm-pdetail { font-size: 12px; color: var(--muted); }
+.cm-body { padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.cm-label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+.cm-input, .cm-select {
+  width: 100%; padding: 11px 13px;
+  background: rgba(255,255,255,0.07); border: 1px solid var(--border-mid);
+  border-radius: 8px; color: var(--cream); font-size: 14px;
+  font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .2s;
+  appearance: none;
+}
+.cm-input:focus, .cm-select:focus { border-color: var(--terra); }
+.cm-select option { background: var(--forest); }
+.cm-input::placeholder { color: rgba(250,246,239,0.3); }
+.cm-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.cm-slot {
+  padding: 9px 4px; border-radius: 8px; font-size: 12px; text-align: center;
+  background: rgba(255,255,255,0.05); color: var(--muted);
+  border: 1px solid var(--border-light); cursor: pointer; transition: all .2s;
+}
+.cm-slot:hover, .cm-slot.selected { background: var(--terra); color: #fff; border-color: var(--terra); }
+.cm-confirm {
+  width: 100%; padding: 13px; border-radius: 10px;
+  background: var(--terra); color: #fff; font-size: 15px; font-weight: 500;
+  border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background .2s;
+}
+.cm-confirm:hover { background: #d4956a; }
+.cm-success { display: none; text-align: center; padding: 24px 28px 32px; }
+.cm-success.visible { display: block; }
+.cm-success-icon { font-size: 48px; margin-bottom: 16px; }
+.cm-success-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--cream); margin-bottom: 8px; }
+.cm-success-body { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.cm-close { position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.3); border: none; color: var(--cream); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+
+@media (max-width: 700px) {
+  .topbar { padding: 16px 20px; }
+  .results-grid { grid-template-columns: 1fr; }
+  .ai-input-row { grid-template-columns: 1fr; }
+  .q-options.cols-2, .q-options.cols-3 { grid-template-columns: 1fr; }
+  .more-grid { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="logo" href="#">Wel<span>ona</span></a>
+  <div class="topbar-nav">
+    <button class="tab-btn active" onclick="switchTab('quiz')">🎯 Find My Match</button>
+    <button class="tab-btn" onclick="switchTab('ai')">🔬 AI Skin Analysis</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ QUIZ PAGE ═══════════════════ -->
+<div class="page active" id="page-quiz">
+
+  <!-- Q1: CONCERN -->
+  <div class="quiz-wrap" id="q1-wrap">
+    <div class="quiz-bg-orb orb1"></div>
+    <div class="quiz-bg-orb orb2"></div>
+    <div class="quiz-progress" id="prog-1">
+      <div class="prog-dot active" style="width:48px"></div>
+      <div class="prog-dot" style="width:28px"></div>
+      <div class="prog-dot" style="width:28px"></div>
+      <div class="prog-dot" style="width:28px"></div>
+    </div>
+    <div class="quiz-slide active" id="q1">
+      <div class="q-eyebrow">Step 1 of 4</div>
+      <h2 class="q-text">What's been weighing<br><em>on you?</em></h2>
+      <p class="q-sub">Choose your main concern — we'll find someone who had the exact same journey.</p>
+      <div class="q-options cols-3" id="concern-opts">
+        <div class="q-opt" onclick="selectConcern('hair', this)">
+          <span class="q-opt-icon">🌿</span>
+          <span class="q-opt-label">Hair Loss</span>
+          <span class="q-opt-sub">Thinning, receding, shedding</span>
+        </div>
+        <div class="q-opt" onclick="selectConcern('prp', this)">
+          <span class="q-opt-icon">💉</span>
+          <span class="q-opt-label">PRP Therapy</span>
+          <span class="q-opt-sub">Non-surgical hair growth</span>
+        </div>
+        <div class="q-opt" onclick="selectConcern('transplant', this)">
+          <span class="q-opt-icon">💫</span>
+          <span class="q-opt-label">Hair Transplant</span>
+          <span class="q-opt-sub">FUE, permanent solution</span>
+        </div>
+        <div class="q-opt" onclick="selectConcern('acne', this)">
+          <span class="q-opt-icon">✨</span>
+          <span class="q-opt-label">Acne & Scars</span>
+          <span class="q-opt-sub">Active acne or old scarring</span>
+        </div>
+        <div class="q-opt" onclick="selectConcern('skin', this)">
+          <span class="q-opt-icon">☀️</span>
+          <span class="q-opt-label">Skin Concerns</span>
+          <span class="q-opt-sub">Pigmentation, glow, ageing</span>
+        </div>
+        <div class="q-opt" onclick="selectConcern('weight', this)">
+          <span class="q-opt-icon">🔥</span>
+          <span class="q-opt-label">Weight Loss</span>
+          <span class="q-opt-sub">Body sculpting, inch loss</span>
+        </div>
+      </div>
+      <button class="q-next" id="next-q1" disabled onclick="goTo('q2')">
+        Continue <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Q2: DURATION -->
+  <div class="quiz-wrap" id="q2-wrap" style="display:none">
+    <div class="quiz-bg-orb orb1"></div>
+    <div class="quiz-bg-orb orb2"></div>
+    <div class="quiz-progress" id="prog-2">
+      <div class="prog-dot done" style="width:48px"></div>
+      <div class="prog-dot active" style="width:48px"></div>
+      <div class="prog-dot" style="width:28px"></div>
+      <div class="prog-dot" style="width:28px"></div>
+    </div>
+    <div class="quiz-slide active" id="q2">
+      <div class="q-eyebrow">Step 2 of 4</div>
+      <h2 class="q-text">How long has this<br><em>been your story?</em></h2>
+      <p class="q-sub">Your journey duration helps us find the most relevant patient match for you.</p>
+      <div class="q-options" id="dur-opts" style="gap:10px">
+        <div class="q-opt-dur" onclick="selectDur('short', this)">
+          <div class="dur-ring"><span class="dur-yrs">½</span><span class="dur-check">✓</span></div>
+          <div class="dur-text">
+            <div class="dur-title">Just started noticing it</div>
+            <div class="dur-sub">Under 6 months</div>
+          </div>
+        </div>
+        <div class="q-opt-dur" onclick="selectDur('mid', this)">
+          <div class="dur-ring"><span class="dur-yrs">1</span><span class="dur-check">✓</span></div>
+          <div class="dur-text">
+            <div class="dur-title">It's been a while</div>
+            <div class="dur-sub">6 months – 2 years</div>
+          </div>
+        </div>
+        <div class="q-opt-dur" onclick="selectDur('long', this)">
+          <div class="dur-ring"><span class="dur-yrs">3</span><span class="dur-check">✓</span></div>
+          <div class="dur-text">
+            <div class="dur-title">Years of trying to fix it</div>
+            <div class="dur-sub">2 – 5 years</div>
+          </div>
+        </div>
+        <div class="q-opt-dur" onclick="selectDur('vlong', this)">
+          <div class="dur-ring"><span class="dur-yrs">∞</span><span class="dur-check">✓</span></div>
+          <div class="dur-text">
+            <div class="dur-title">Most of my life</div>
+            <div class="dur-sub">More than 5 years</div>
+          </div>
+        </div>
+      </div>
+      <button class="q-next" id="next-q2" disabled onclick="goTo('q3')">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Q3: FEAR -->
+  <div class="quiz-wrap" id="q3-wrap" style="display:none">
+    <div class="quiz-bg-orb orb1"></div>
+    <div class="quiz-bg-orb orb2"></div>
+    <div class="quiz-progress" id="prog-3">
+      <div class="prog-dot done" style="width:48px"></div>
+      <div class="prog-dot done" style="width:48px"></div>
+      <div class="prog-dot active" style="width:48px"></div>
+      <div class="prog-dot" style="width:28px"></div>
+    </div>
+    <div class="quiz-slide active" id="q3">
+      <div class="q-eyebrow">Step 3 of 4</div>
+      <h2 class="q-text">What holds you<br><em>back the most?</em></h2>
+      <p class="q-sub">Honest answer — we'll find you a peer who had the exact same hesitation and got through it.</p>
+      <div class="q-options cols-2" id="fear-opts" style="gap:10px">
+        <div class="q-opt-fear" onclick="selectFear('cost', this)">
+          <span class="fear-label">💸 The cost worries me</span>
+          <span class="fear-sub">I don't know if it's worth the investment</span>
+        </div>
+        <div class="q-opt-fear" onclick="selectFear('pain', this)">
+          <span class="fear-label">😰 Pain or side effects</span>
+          <span class="fear-sub">I'm scared of what it might feel like</span>
+        </div>
+        <div class="q-opt-fear" onclick="selectFear('result', this)">
+          <span class="fear-label">🤔 Will it actually work?</span>
+          <span class="fear-sub">I've tried things before and they failed</span>
+        </div>
+        <div class="q-opt-fear" onclick="selectFear('time', this)">
+          <span class="fear-label">⏱ Too many sessions</span>
+          <span class="fear-sub">I can't commit to a long treatment plan</span>
+        </div>
+      </div>
+      <button class="q-next" id="next-q3" disabled onclick="goTo('q4')">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Q4: PREFERENCE -->
+  <div class="quiz-wrap" id="q4-wrap" style="display:none">
+    <div class="quiz-bg-orb orb1"></div>
+    <div class="quiz-bg-orb orb2"></div>
+    <div class="quiz-progress" id="prog-4">
+      <div class="prog-dot done" style="width:48px"></div>
+      <div class="prog-dot done" style="width:48px"></div>
+      <div class="prog-dot done" style="width:48px"></div>
+      <div class="prog-dot active" style="width:48px"></div>
+    </div>
+    <div class="quiz-slide active" id="q4">
+      <div class="q-eyebrow">Step 4 of 4 — Almost there</div>
+      <h2 class="q-text">Who do you want<br><em>to hear from?</em></h2>
+      <p class="q-sub">You're more likely to trust someone who shares your background. Pick your preferences.</p>
+      <div class="pref-group">
+        <div class="pref-group-label">Gender preference</div>
+        <div class="pref-pills" id="gender-pills">
+          <span class="pref-pill selected" onclick="selectPref('gender','any',this)">Any</span>
+          <span class="pref-pill" onclick="selectPref('gender','female',this)">Female</span>
+          <span class="pref-pill" onclick="selectPref('gender','male',this)">Male</span>
+        </div>
+      </div>
+      <div class="pref-group">
+        <div class="pref-group-label">Language preference</div>
+        <div class="pref-pills" id="lang-pills">
+          <span class="pref-pill selected" onclick="selectPref('lang','any',this)">Any</span>
+          <span class="pref-pill" onclick="selectPref('lang','tamil',this)">Tamil</span>
+          <span class="pref-pill" onclick="selectPref('lang','telugu',this)">Telugu</span>
+          <span class="pref-pill" onclick="selectPref('lang','hindi',this)">Hindi</span>
+          <span class="pref-pill" onclick="selectPref('lang','english',this)">English</span>
+          <span class="pref-pill" onclick="selectPref('lang','malayalam',this)">Malayalam</span>
+        </div>
+      </div>
+      <button class="q-next" onclick="runMatch()">Find My Match ✦</button>
+    </div>
+  </div>
+
+  <!-- MATCHING ANIMATION -->
+  <div class="quiz-wrap" id="matching-wrap" style="display:none">
+    <div class="quiz-bg-orb orb1"></div>
+    <div class="quiz-bg-orb orb2"></div>
+    <div class="matching-screen">
+      <div class="match-ring-wrap">
+        <div class="match-ring"></div>
+        <div class="match-logo-inner">✦</div>
+      </div>
+      <div class="match-title">Finding your<br><em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--terra)">perfect match…</em></div>
+      <div class="match-steps" id="match-steps">
+        <div class="match-step" id="ms1"><div class="match-step-dot"></div>Analysing your concern profile</div>
+        <div class="match-step" id="ms2"><div class="match-step-dot"></div>Matching treatment journey</div>
+        <div class="match-step" id="ms3"><div class="match-step-dot"></div>Filtering by language & gender</div>
+        <div class="match-step" id="ms4"><div class="match-step-dot"></div>Found <span id="match-count">3</span> matches — showing best fit</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results-wrap" style="display:none">
+    <div class="quiz-bg-orb orb1" style="position:fixed;top:-100px;right:-100px;opacity:.5;"></div>
+    <div class="results-wrap">
+      <div class="results-header">
+        <div class="results-eyebrow">Your Personalised Match</div>
+        <h2 class="results-title" id="result-title">We found someone<br>who's been exactly where you are</h2>
+        <p class="results-sub" id="result-sub">Based on your concern, journey length, and preferences — here's your closest peer match.</p>
+        <div class="match-score">
+          <div class="match-score-dot"></div>
+          <span id="match-pct">96% match</span>
+        </div>
+      </div>
+
+      <div class="insight-strip" id="fear-insight"></div>
+
+      <div class="results-grid">
+        <!-- Peer Card -->
+        <div class="peer-card" id="peer-card">
+          <div class="peer-card-hero" id="peer-hero">
+            <div class="peer-card-tags" id="peer-tags"></div>
+            <div class="peer-match-badge">Best Match</div>
+            <button class="peer-play-btn" onclick="openConsult()">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M8 6l9 5-9 5V6z" fill="white"/></svg>
+            </button>
+          </div>
+          <div class="peer-card-body">
+            <div class="peer-identity">
+              <div class="peer-avatar" id="peer-avatar"></div>
+              <div>
+                <div class="peer-name" id="peer-name"></div>
+                <div class="peer-detail" id="peer-detail"></div>
+              </div>
+            </div>
+            <div class="peer-quote" id="peer-quote"></div>
+            <div class="peer-stats" id="peer-stats"></div>
+            <div class="peer-actions">
+              <button class="btn-watch" onclick="openConsult()">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 3l7 4-7 4V3z" fill="white"/></svg>
+                Watch Video
+              </button>
+              <button class="btn-talk" onclick="openConsult()">
+                💬 Talk to <span id="talk-first-name">them</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommendation Card -->
+        <div class="reco-card" id="reco-card">
+          <div class="reco-label">Recommended for you</div>
+          <div class="reco-title" id="reco-title"></div>
+          <div class="reco-body" id="reco-body"></div>
+          <div class="reco-points" id="reco-points"></div>
+          <button class="reco-cta" onclick="openConsult()">Book Free Clinic Consultation →</button>
+        </div>
+      </div>
+
+      <!-- More Matches -->
+      <div class="more-matches" id="more-matches">
+        <div class="more-label">Also matched for you</div>
+        <div class="more-grid" id="more-grid"></div>
+      </div>
+
+      <div style="text-align:center;margin-top:36px;">
+        <button class="retake-btn" onclick="retakeQuiz()">
+          ↩ Retake the quiz
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end quiz page -->
+
+<!-- ═══════════════════ AI PAGE ═══════════════════ -->
+<div class="page" id="page-ai">
+  <div class="ai-wrap">
+    <div class="ai-header">
+      <div class="ai-badge">
+        <div class="ai-badge-dot"></div>
+        Powered by Claude AI · Vision Analysis
+      </div>
+      <h1 class="ai-title">AI Skin & Hair<br><em style="font-style:italic">Concern Analyser</em></h1>
+      <p class="ai-sub">Upload a photo and describe your concern. Our AI analyses it and suggests the most relevant treatments and peer testimonials to explore.</p>
+      <span class="ai-disclaimer">⚠ This is not a medical diagnosis. For treatment, always consult a Welona specialist.</span>
+    </div>
+
+    <div id="ai-form-area">
+      <div class="ai-upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" accept="image/*" onchange="handleUpload(event)">
+        <div id="upload-placeholder">
+          <div class="upload-icon">📷</div>
+          <div class="upload-title">Upload a photo</div>
+          <div class="upload-sub">Face, scalp, or affected area · JPG, PNG · Max 5MB</div>
+        </div>
+        <img class="upload-preview" id="upload-preview" alt="Uploaded photo">
+        <button class="upload-change" id="upload-change" onclick="changePhoto(event)">Change photo</button>
+      </div>
+
+      <div class="ai-input-row">
+        <div class="ai-field">
+          <label>Main concern</label>
+          <select class="ai-select" id="ai-concern">
+            <option value="">Select concern…</option>
+            <option value="hair_loss">Hair Loss / Thinning</option>
+            <option value="acne">Acne / Pimples</option>
+            <option value="acne_scars">Acne Scars</option>
+            <option value="pigmentation">Pigmentation / Dark Spots</option>
+            <option value="anti_aging">Anti-Aging / Fine Lines</option>
+            <option value="weight">Weight / Body</option>
+            <option value="other">Other / Not Sure</option>
+          </select>
+        </div>
+        <div class="ai-field">
+          <label>How long have you had this?</label>
+          <select class="ai-select" id="ai-duration">
+            <option value="">Select…</option>
+            <option value="recent">Under 6 months</option>
+            <option value="mid">6 months – 2 years</option>
+            <option value="long">2 – 5 years</option>
+            <option value="vlong">More than 5 years</option>
+          </select>
+        </div>
+      </div>
+
+      <textarea class="ai-textarea" id="ai-desc" placeholder="Describe in your own words what you're experiencing — any treatments you've already tried, what's helped or not, how it affects your daily life…" rows="3"></textarea>
+
+      <div class="api-key-row">
+        <span class="api-key-icon">🔑</span>
+        <span class="api-key-label">API Key:</span>
+        <input type="password" class="api-key-input" id="api-key" placeholder="Enter your Anthropic API key (sk-ant-…)">
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:-12px;margin-bottom:16px;padding:0 4px;">
+        Your key is only used for this session and never stored. For production, route through your backend.
+      </div>
+
+      <button class="ai-analyse-btn" id="analyse-btn" onclick="runAnalysis()">
+        <span>✦</span> Analyse with AI
+      </button>
+    </div>
+
+    <div class="ai-thinking" id="ai-thinking">
+      <div class="thinking-ring"></div>
+      <div class="thinking-msg" id="thinking-msg">Analysing your photo and description…</div>
+      <div class="thinking-sub" id="thinking-sub">This takes about 5 seconds</div>
+    </div>
+
+    <div class="ai-results" id="ai-results">
+      <div class="ai-result-header">
+        <div class="ai-result-icon" id="result-icon">🔬</div>
+        <div>
+          <div class="ai-result-title" id="result-heading">Analysis Complete</div>
+          <div class="ai-result-sub" id="result-subtext">Here's what our AI found</div>
+        </div>
+      </div>
+      <div class="ai-result-body" id="result-content"></div>
+      <div class="result-actions">
+        <button class="btn-primary-terra" onclick="switchTab('quiz')">Find a Peer Match →</button>
+        <button class="btn-ghost-light" onclick="window.open('https://www.welona.in','_blank')">Book Free Consult</button>
+      </div>
+      <button class="re-analyse" onclick="resetAnalysis()">↩ Analyse another photo</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONSULT MODAL -->
+<div class="modal-overlay" id="consult-modal">
+  <div class="consult-modal" style="position:relative;">
+    <button class="cm-close" onclick="closeModal()">✕</button>
+    <div class="cm-header">
+      <div class="cm-title">Book a Peer Consultation</div>
+      <div class="cm-sub">Free 15-min call. No sales. Just honest answers.</div>
+      <div class="cm-person">
+        <div class="cm-avatar" id="cm-avatar" style="background:#3D6356">P</div>
+        <div>
+          <div class="cm-pname" id="cm-pname">Priya S.</div>
+          <div class="cm-pdetail" id="cm-pdetail">Acne Scar Treatment · Tamil, English</div>
+        </div>
+      </div>
+    </div>
+    <div class="cm-body" id="cm-body">
+      <div>
+        <label class="cm-label">Your name</label>
+        <input class="cm-input" type="text" id="cm-name" placeholder="Your name">
+      </div>
+      <div>
+        <label class="cm-label">Phone number</label>
+        <input class="cm-input" type="tel" id="cm-phone" placeholder="+91 98xxx xxxxx">
+      </div>
+      <div>
+        <label class="cm-label">Pick a time slot</label>
+        <div class="cm-slots">
+          <div class="cm-slot" onclick="selectCmSlot(this)">Mon 10 AM</div>
+          <div class="cm-slot" onclick="selectCmSlot(this)">Mon 3 PM</div>
+          <div class="cm-slot" onclick="selectCmSlot(this)">Tue 11 AM</div>
+          <div class="cm-slot" onclick="selectCmSlot(this)">Tue 5 PM</div>
+          <div class="cm-slot" onclick="selectCmSlot(this)">Wed 10 AM</div>
+          <div class="cm-slot" onclick="selectCmSlot(this)">Wed 4 PM</div>
+        </div>
+      </div>
+      <button class="cm-confirm" onclick="confirmConsult()">Confirm Free Call ✓</button>
+    </div>
+    <div class="cm-success" id="cm-success">
+      <div class="cm-success-icon">✦</div>
+      <div class="cm-success-title">You're booked!</div>
+      <p class="cm-success-body">A meeting link has been sent to your phone. <strong id="cm-peer-first"></strong> is looking forward to speaking with you. <br><br>Expect a reminder 30 minutes before your call.</p>
+      <button class="btn-primary-terra" style="margin-top:20px;width:100%;border:none;cursor:pointer;" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════
+// DATA
+// ══════════════════════════════════
+const PEERS = [
+  { id:1, name:'Priya S.', age:29, gender:'female', langs:['tamil','english'], concern:'acne', color:'#C4855A',
+    quote:'Reduced 80% of my acne scars in just 5 months. I was scared at first but the team made me feel so at ease from day one.',
+    sessions:5, duration:'5 months',
+    fears:['result','pain'],
+    reco:{ title:'Laser Scar Resurfacing + Chemical Peels', body:'Your concern pattern — long-standing acne scarring combined with ongoing breakouts — responds best to a two-phase approach.', points:[['Phase 1 (Month 1–2)', 'Address active acne with medical-grade treatment to stop new scarring'],['Phase 2 (Month 3–5)', 'Laser resurfacing sessions to fade existing scars'],['Maintenance', 'A personalised at-home skincare routine to sustain results']] }
+  },
+  { id:2, name:'Arjun K.', age:34, gender:'male', langs:['telugu','english'], concern:'hair', color:'#2C4A3E',
+    quote:'Started seeing new growth after session 3. The team is genuinely invested in your results, not just completing sessions.',
+    sessions:8, duration:'6 months',
+    fears:['result','time'],
+    reco:{ title:'GFC + PRP Hair Restoration Protocol', body:'Hair loss at this stage responds very well to a combination of Growth Factor Concentrate and Platelet-Rich Plasma therapy.', points:[['First 4 sessions', 'GFC injections to stimulate dormant follicles'],['Sessions 5–8', 'PRP strengthens and sustains new growth'],['Expected results', 'Visible density improvement from session 3–4']] }
+  },
+  { id:3, name:'Kavitha R.', age:38, gender:'female', langs:['tamil'], concern:'weight', color:'#5A7C6E',
+    quote:'Lost 11 kg in 4 months without crash dieting. It\'s the first program that addressed why I was gaining, not just how to lose.',
+    sessions:12, duration:'4 months',
+    fears:['cost','time'],
+    reco:{ title:'Non-Surgical Body Sculpting + Metabolic Reset', body:'A structured combination of body treatments and metabolic coaching gives consistent, sustainable results.', points:[['Weeks 1–4', 'Body mapping and metabolic assessment'],['Weeks 5–12', 'CoolSculpting + inch-loss therapy sessions'],['Ongoing', 'Nutritional protocol and monthly progress tracking']] }
+  },
+  { id:4, name:'Ravi M.', age:31, gender:'male', langs:['tamil','english'], concern:'transplant', color:'#3D5A80',
+    quote:'Natural hairline at 31. People don\'t believe I had a transplant — it looks that natural. Recovery was way easier than I expected.',
+    sessions:1, duration:'Single procedure',
+    fears:['pain','result'],
+    reco:{ title:'FUE Hair Transplant — Permanent Solution', body:'For complete hairline restoration, FUE (Follicular Unit Extraction) is the gold standard — natural-looking, minimal scarring, permanent.', points:[['Consultation', 'Hairline design and donor assessment (1 session)'],['Procedure day', 'FUE extraction and implantation (6–8 hours)'],['Recovery', '7–10 days visible; full growth visible in 9–12 months']] }
+  },
+  { id:5, name:'Deepa N.', age:26, gender:'female', langs:['hindi','english'], concern:'acne', color:'#9B7FA6',
+    quote:'Clear skin for the first time in 8 years. They actually diagnosed the root cause instead of just treating the surface.',
+    sessions:6, duration:'5 months',
+    fears:['result','cost'],
+    reco:{ title:'Root-Cause Acne Protocol + Scar Prevention', body:'Persistent acne often has hormonal, dietary, or inflammatory triggers. Treating the root cause prevents scarring from forming.', points:[['Month 1', 'Comprehensive skin analysis and trigger identification'],['Month 2–4', '6 treatment sessions targeting sebaceous activity'],['Month 5+', 'Scar prevention protocol and homecare routine']] }
+  },
+  { id:6, name:'Sundar P.', age:42, gender:'male', langs:['tamil'], concern:'prp', color:'#6B8F71',
+    quote:'PRP gave me back hair I thought I\'d lost forever. Simple process, zero downtime. Results speak for themselves.',
+    sessions:6, duration:'6 months',
+    fears:['pain','time'],
+    reco:{ title:'PRP Hair Therapy — Natural Growth Stimulation', body:'PRP uses your own blood platelets to naturally stimulate dormant follicles — no chemicals, no surgery.', points:[['6 monthly sessions', 'Platelet-rich plasma injected into scalp'],['Minimal discomfort', 'Topical numbing cream applied before each session'],['Results timeline', 'Visible improvement from session 2–3; peak at 6 months']] }
+  },
+  { id:7, name:'Meena L.', age:32, gender:'female', langs:['malayalam','english'], concern:'skin', color:'#C4855A',
+    quote:'My hyperpigmentation cleared up in 3 months. Skin looks honestly 10 years younger. The team customised everything for me.',
+    sessions:4, duration:'3 months',
+    fears:['cost','pain'],
+    reco:{ title:'Laser Brightening + Chemical Peel Protocol', body:'Sun-induced pigmentation and uneven tone respond rapidly to a combination of targeted laser and medical-grade peels.', points:[['Session 1–2', 'Q-switch laser for targeted dark spot reduction'],['Session 3–4', 'Medical-grade peel for overall tone correction'],['Maintenance', 'SPF protocol and brightening homecare kit']] }
+  },
+  { id:8, name:'Vijay A.', age:36, gender:'male', langs:['telugu'], concern:'weight', color:'#4A7B7B',
+    quote:'Stubborn belly fat gone after 2 sessions. Non-invasive, no downtime. Back at work same day. Incredible technology.',
+    sessions:2, duration:'6 weeks',
+    fears:['time','pain'],
+    reco:{ title:'CoolSculpting — Targeted Fat Reduction', body:'For stubborn pockets of fat resistant to exercise, CoolSculpting delivers measurable, permanent results without surgery.', points:[['Session 1', 'Targeted fat mapping and first CoolSculpting application'],['Session 2 (week 3)', 'Second application for complete zone treatment'],['Results', '20–25% fat reduction per zone; visible in 4–8 weeks']] }
+  }
+];
+
+const FEAR_INSIGHTS = {
+  cost: { icon:'💸', title:'About the cost concern — here\'s what patients say', body:'Most Welona patients say the cost seemed high until they factored in years of wasted money on products that didn\'t work. Your matched peer had the same hesitation and can share exactly what they spent and what they got back.' },
+  pain: { icon:'😰', title:'About the pain concern — here\'s the reality', body:'Welona treatments use medical-grade numbing protocols. Over 90% of patients rate discomfort as 2–3 out of 10. Your peer match had the same worry and can tell you exactly what each session feels like.' },
+  result: { icon:'🤔', title:'About doubting the results — this is the most common fear', body:'Every patient who\'s seen results at Welona once felt exactly what you\'re feeling right now. That\'s precisely why peer consultations exist — to hear from real people who had zero belief and still got results.' },
+  time: { icon:'⏱', title:'About the time commitment — it\'s less than you think', body:'Most Welona treatments require 1 session every 3–6 weeks, averaging 45–90 minutes each. Your peer match managed sessions alongside a full-time job and can give you their exact schedule.' }
+};
+
+const CONCERN_LABELS = {
+  hair:'Hair Loss', prp:'PRP Therapy', transplant:'Hair Transplant',
+  acne:'Acne & Scars', skin:'Skin Brightening', weight:'Weight Loss'
+};
+
+// ══════════════════════════════════
+// STATE
+// ══════════════════════════════════
+let answers = { concern: null, duration: null, fear: null, gender: 'any', lang: 'any' };
+let matchedPeer = null;
+
+// ══════════════════════════════════
+// TABS
+// ══════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  document.querySelectorAll('.tab-btn')[tab === 'quiz' ? 0 : 1].classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ══════════════════════════════════
+// QUIZ LOGIC
+// ══════════════════════════════════
+function selectConcern(val, el) {
+  answers.concern = val;
+  document.querySelectorAll('#concern-opts .q-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('next-q1').disabled = false;
+}
+function selectDur(val, el) {
+  answers.duration = val;
+  document.querySelectorAll('#dur-opts .q-opt-dur').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('next-q2').disabled = false;
+}
+function selectFear(val, el) {
+  answers.fear = val;
+  document.querySelectorAll('#fear-opts .q-opt-fear').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('next-q3').disabled = false;
+}
+function selectPref(type, val, el) {
+  answers[type] = val;
+  const container = type === 'gender' ? '#gender-pills' : '#lang-pills';
+  document.querySelectorAll(container + ' .pref-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function goTo(step) {
+  const steps = { q1:'q1-wrap', q2:'q2-wrap', q3:'q3-wrap', q4:'q4-wrap' };
+  Object.values(steps).forEach(id => { document.getElementById(id).style.display = 'none'; });
+  document.getElementById(steps[step]).style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+function runMatch() {
+  document.getElementById('q4-wrap').style.display = 'none';
+  document.getElementById('matching-wrap').style.display = 'flex';
+  window.scrollTo(0, 0);
+
+  const steps = ['ms1','ms2','ms3','ms4'];
+  steps.forEach((s, i) => {
+    setTimeout(() => { document.getElementById(s).classList.add('visible'); }, i * 700);
+  });
+
+  setTimeout(() => {
+    const matched = findMatch();
+    document.getElementById('matching-wrap').style.display = 'none';
+    renderResults(matched);
+  }, 3200);
+}
+
+function findMatch() {
+  let candidates = PEERS.filter(p => p.concern === answers.concern || answers.concern === null);
+  if (!candidates.length) candidates = [...PEERS];
+
+  function score(p) {
+    let s = 0;
+    if (p.concern === answers.concern) s += 40;
+    if (answers.gender !== 'any' && p.gender === answers.gender) s += 20;
+    if (answers.lang !== 'any' && p.langs.includes(answers.lang)) s += 25;
+    if (answers.fear && p.fears && p.fears.includes(answers.fear)) s += 15;
+    return s;
+  }
+  candidates.sort((a, b) => score(b) - score(a));
+  return candidates;
+}
+
+function renderResults(ranked) {
+  const peer = ranked[0];
+  matchedPeer = peer;
+  const others = ranked.slice(1, 4);
+
+  // Header
+  const concern = CONCERN_LABELS[answers.concern] || 'your concern';
+  document.getElementById('result-title').innerHTML = `We found someone who's been<br>exactly where <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--terra)">you are</em>`;
+  document.getElementById('result-sub').textContent = `Matched on ${concern}${answers.lang !== 'any' ? ', ' + answers.lang : ''}${answers.gender !== 'any' ? ', ' + answers.gender : ''} — ${ranked.length} patients found.`;
+
+  const matchPct = Math.min(98, 70 + (answers.lang !== 'any' ? 10 : 0) + (answers.gender !== 'any' ? 8 : 0) + (answers.concern ? 10 : 0));
+  document.getElementById('match-pct').textContent = matchPct + '% match';
+
+  // Fear insight
+  if (answers.fear && FEAR_INSIGHTS[answers.fear]) {
+    const fi = FEAR_INSIGHTS[answers.fear];
+    document.getElementById('fear-insight').innerHTML = `<div class="insight-icon">${fi.icon}</div><div><div class="insight-title">${fi.title}</div><div class="insight-body">${fi.body}</div></div>`;
+  }
+
+  // Peer card
+  const initials = peer.name.split(' ').map(n=>n[0]).join('');
+  const langLabel = peer.langs.map(l => l.charAt(0).toUpperCase()+l.slice(1)).join(', ');
+  document.getElementById('peer-avatar').textContent = initials;
+  document.getElementById('peer-avatar').style.background = peer.color;
+  document.getElementById('peer-name').textContent = peer.name;
+  document.getElementById('peer-detail').textContent = `${peer.age} yrs · ${peer.gender.charAt(0).toUpperCase()+peer.gender.slice(1)} · ${peer.langs.map(l=>l.charAt(0).toUpperCase()+l.slice(1)).join(', ')}`;
+  document.getElementById('peer-quote').textContent = `"${peer.quote}"`;
+  document.getElementById('peer-stats').innerHTML = `
+    <div class="peer-stat"><strong>${peer.sessions}</strong><span>Sessions</span></div>
+    <div class="peer-stat"><strong>${peer.duration}</strong><span>Duration</span></div>
+  `;
+  document.getElementById('talk-first-name').textContent = peer.name.split(' ')[0];
+  document.getElementById('peer-hero').style.background = `linear-gradient(135deg, ${peer.color}44, ${peer.color}22)`;
+  document.getElementById('peer-tags').innerHTML = `<span class="peer-tag peer-tag-t">${CONCERN_LABELS[peer.concern]}</span><span class="peer-tag peer-tag-l">${langLabel}</span>`;
+
+  // Reco card
+  const r = peer.reco;
+  document.getElementById('reco-title').textContent = r.title;
+  document.getElementById('reco-body').textContent = r.body;
+  document.getElementById('reco-points').innerHTML = r.points.map(([title, desc]) => `
+    <div class="reco-point">
+      <div class="rp-dot"></div>
+      <div class="reco-point-text"><strong>${title}</strong>${desc}</div>
+    </div>
+  `).join('');
+
+  // More matches
+  document.getElementById('more-grid').innerHTML = others.map(p => {
+    const ini = p.name.split(' ').map(n=>n[0]).join('');
+    return `
+      <div class="more-card" onclick="openConsultPeer(${p.id})">
+        <div class="more-avatar" style="background:${p.color}">${ini}</div>
+        <div>
+          <div class="more-name">${p.name}</div>
+          <div class="more-detail">${CONCERN_LABELS[p.concern]} · ${p.langs.map(l=>l.charAt(0).toUpperCase()+l.slice(1)).join(', ')}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Consult modal data
+  document.getElementById('cm-avatar').textContent = initials;
+  document.getElementById('cm-avatar').style.background = peer.color;
+  document.getElementById('cm-pname').textContent = peer.name;
+  document.getElementById('cm-pdetail').textContent = `${CONCERN_LABELS[peer.concern]} · ${langLabel}`;
+  document.getElementById('cm-peer-first').textContent = peer.name.split(' ')[0];
+
+  document.getElementById('results-wrap').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function retakeQuiz() {
+  answers = { concern:null, duration:null, fear:null, gender:'any', lang:'any' };
+  document.getElementById('results-wrap').style.display = 'none';
+  document.querySelectorAll('.q-opt, .q-opt-dur, .q-opt-fear').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('.pref-pill').forEach(p => p.classList.remove('selected'));
+  document.querySelectorAll('#gender-pills .pref-pill:first-child, #lang-pills .pref-pill:first-child').forEach(p => p.classList.add('selected'));
+  document.getElementById('next-q1').disabled = true;
+  document.getElementById('next-q2').disabled = true;
+  document.getElementById('next-q3').disabled = true;
+  document.querySelectorAll('.match-step').forEach(s => s.classList.remove('visible'));
+  goTo('q1');
+}
+
+// ══════════════════════════════════
+// CONSULT MODAL
+// ══════════════════════════════════
+function openConsult() {
+  document.getElementById('cm-body').style.display = 'flex';
+  document.getElementById('cm-success').classList.remove('visible');
+  document.getElementById('consult-modal').classList.add('open');
+}
+function openConsultPeer(id) {
+  const p = PEERS.find(x => x.id === id);
+  if (!p) return;
+  const ini = p.name.split(' ').map(n=>n[0]).join('');
+  const langLabel = p.langs.map(l=>l.charAt(0).toUpperCase()+l.slice(1)).join(', ');
+  document.getElementById('cm-avatar').textContent = ini;
+  document.getElementById('cm-avatar').style.background = p.color;
+  document.getElementById('cm-pname').textContent = p.name;
+  document.getElementById('cm-pdetail').textContent = `${CONCERN_LABELS[p.concern]} · ${langLabel}`;
+  document.getElementById('cm-peer-first').textContent = p.name.split(' ')[0];
+  openConsult();
+}
+function closeModal() { document.getElementById('consult-modal').classList.remove('open'); }
+function selectCmSlot(el) {
+  document.querySelectorAll('.cm-slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function confirmConsult() {
+  document.getElementById('cm-body').style.display = 'none';
+  document.getElementById('cm-success').classList.add('visible');
+}
+document.getElementById('consult-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('consult-modal')) closeModal();
+});
+
+// ══════════════════════════════════
+// AI ANALYSER
+// ══════════════════════════════════
+let uploadedFile = null;
+
+function handleUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  uploadedFile = file;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const zone = document.getElementById('upload-zone');
+    const prev = document.getElementById('upload-preview');
+    const placeholder = document.getElementById('upload-placeholder');
+    const change = document.getElementById('upload-change');
+    prev.src = ev.target.result;
+    prev.classList.add('visible');
+    placeholder.style.display = 'none';
+    change.classList.add('visible');
+    zone.classList.add('has-image');
+  };
+  reader.readAsDataURL(file);
+}
+
+function changePhoto(e) {
+  e.stopPropagation();
+  document.getElementById('file-input').click();
+}
+
+async function runAnalysis() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  const concern = document.getElementById('ai-concern').value;
+  const duration = document.getElementById('ai-duration').value;
+  const desc = document.getElementById('ai-desc').value.trim();
+
+  if (!apiKey) { alert('Please enter your Anthropic API key to use AI analysis.'); return; }
+  if (!concern) { alert('Please select your main concern.'); return; }
+
+  document.getElementById('ai-form-area').style.display = 'none';
+  const thinking = document.getElementById('ai-thinking');
+  thinking.classList.add('visible');
+
+  const thinkingMsgs = [
+    ['Analysing your photo and description…', 'This takes about 5 seconds'],
+    ['Identifying concern patterns…', 'Comparing with clinical data'],
+    ['Generating personalised recommendations…', 'Almost done']
+  ];
+  let msgIdx = 0;
+  const msgTimer = setInterval(() => {
+    msgIdx = (msgIdx + 1) % thinkingMsgs.length;
+    document.getElementById('thinking-msg').textContent = thinkingMsgs[msgIdx][0];
+    document.getElementById('thinking-sub').textContent = thinkingMsgs[msgIdx][1];
+  }, 1800);
+
+  try {
+    let messageContent = [];
+
+    if (uploadedFile) {
+      const b64 = await fileToBase64(uploadedFile);
+      const mediaType = uploadedFile.type || 'image/jpeg';
+      messageContent.push({
+        type: 'image',
+        source: { type: 'base64', media_type: mediaType, data: b64 }
+      });
+    }
+
+    const concClear = {
+      hair_loss:'hair loss / thinning', acne:'acne / pimples', acne_scars:'acne scars',
+      pigmentation:'pigmentation / dark spots', anti_aging:'anti-aging / fine lines',
+      weight:'weight / body concern', other:'skin/hair concern (unspecified)'
+    }[concern] || concern;
+    const durClear = {
+      recent:'under 6 months', mid:'6 months to 2 years', long:'2 to 5 years', vlong:'more than 5 years'
+    }[duration] || duration;
+
+    const prompt = `You are a helpful clinical assistant at Welona, a premium skin, hair, and slimming clinic in Chennai, India. 
+
+The patient has shared:
+- Main concern: ${concClear}
+- Duration: ${durClear}
+- Their description: "${desc || 'No additional description provided'}"
+${uploadedFile ? '- They have uploaded a photo of their affected area (shown above).' : ''}
+
+Write a warm, empathetic, and medically informed response (3–4 short paragraphs) that:
+1. Acknowledges what they're going through emotionally — validate the frustration of dealing with this concern
+2. Based on the photo${uploadedFile ? ' and' : ' (not provided) and'} description, briefly describe what you observe or what typically presents with this concern profile
+3. Suggest 2–3 treatment approaches at Welona that are most relevant — use specific treatment names (GFC, PRP, FUE, Chemical Peels, CoolSculpting, Laser Resurfacing, etc.)
+4. End with one encouraging sentence and invite them to book a free consultation
+
+Keep the tone: warm, professional, not salesy. Use plain paragraphs — no bullet points, no markdown headers. Be honest about what is and isn't possible without an in-person examination.
+
+IMPORTANT: Remind them at the end that this is a preliminary assessment only, not a medical diagnosis.`;
+
+    messageContent.push({ type: 'text', text: prompt });
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-5',
+        max_tokens: 800,
+        messages: [{ role: 'user', content: messageContent }]
+      })
+    });
+
+    clearInterval(msgTimer);
+    thinking.classList.remove('visible');
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      throw new Error(err.error?.message || 'API error');
+    }
+
+    const data = await resp.json();
+    const text = data.content.filter(c => c.type === 'text').map(c => c.text).join('\n');
+
+    const concIcons = {
+      hair_loss:'🌿', acne:'✨', acne_scars:'🔬', pigmentation:'☀️',
+      anti_aging:'⏳', weight:'🔥', other:'💫'
+    };
+    document.getElementById('result-icon').textContent = concIcons[concern] || '🔬';
+    document.getElementById('result-heading').textContent = 'AI Analysis Complete';
+    document.getElementById('result-subtext').textContent = `Based on your ${concClear} concern · ${durClear}`;
+    document.getElementById('result-content').textContent = text;
+
+    document.getElementById('ai-results').classList.add('visible');
+
+  } catch(err) {
+    clearInterval(msgTimer);
+    thinking.classList.remove('visible');
+    document.getElementById('ai-form-area').style.display = 'block';
+
+    if (err.message.includes('401') || err.message.includes('authentication')) {
+      alert('Invalid API key. Please check your Anthropic API key and try again.');
+    } else {
+      alert('Analysis failed: ' + err.message + '\n\nMake sure your API key is valid and has vision permissions.');
+    }
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = () => rej(new Error('File read failed'));
+    r.readAsDataURL(file);
+  });
+}
+
+function resetAnalysis() {
+  document.getElementById('ai-results').classList.remove('visible');
+  document.getElementById('ai-form-area').style.display = 'block';
+  document.getElementById('upload-preview').classList.remove('visible');
+  document.getElementById('upload-placeholder').style.display = 'block';
+  document.getElementById('upload-change').classList.remove('visible');
+  document.getElementById('upload-zone').classList.remove('has-image');
+  document.getElementById('ai-concern').value = '';
+  document.getElementById('ai-duration').value = '';
+  document.getElementById('ai-desc').value = '';
+  uploadedFile = null;
+  document.getElementById('file-input').value = '';
+}
+</script>
+</body>
+</html>
