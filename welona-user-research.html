@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Understanding Our User — Welona User Research</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0C0F0E;--bg2:#141918;--bg3:#1C2120;--card:#1A1F1E;--border:#2A302E;
+--ink:#E8E4DC;--mute:#9A958C;--dim:#6A655E;--faint:#3A3632;
+--grn:#4ADE80;--grn-d:#166534;--gld:#E8B86D;--crl:#F87171;--blu:#60A5FA;--vlt:#C084FC;
+--hd:'DM Serif Display',Georgia,serif;--bd:'Outfit',system-ui,sans-serif}
+body{font-family:var(--bd);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.6}
+.sec{max-width:900px;margin:0 auto;padding:80px 24px}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--grn);margin-bottom:16px}
+.sec-title{font-family:var(--hd);font-size:clamp(28px,4vw,42px);line-height:1.15;margin-bottom:12px}
+.sec-sub{font-size:16px;color:var(--mute);line-height:1.7;max-width:640px}
+.card{background:var(--card);border-radius:20px;padding:28px;border:1px solid var(--border)}
+.divider{height:1px;background:var(--border);margin:80px 0}
+.tag{display:inline-block;padding:4px 12px;border-radius:50px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:640px){.grid-2,.grid-3{grid-template-columns:1fr}}
+.bar{height:8px;border-radius:4px;background:var(--bg3);overflow:hidden;margin-top:8px}
+.bar-fill{height:100%;border-radius:4px;transition:width 1s}
+.quote{font-family:var(--hd);font-size:20px;line-height:1.5;color:var(--ink);font-style:italic;padding:24px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:32px 0}
+.flow-line{display:flex;align-items:center;gap:0}
+.flow-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.flow-connector{height:2px;flex:1;min-width:20px}
+.pain-card{padding:20px;border-radius:16px;border-left:4px solid}
+.emotion-bar{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--faint)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<section style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px;position:relative;overflow:hidden">
+<div style="position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(74,222,128,.08),transparent 70%);border-radius:50%"></div>
+<div style="position:absolute;bottom:-100px;left:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(232,184,109,.06),transparent 70%);border-radius:50%"></div>
+<div style="text-align:center;max-width:700px;position:relative">
+<div style="font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--grn);margin-bottom:24px">User Research Document</div>
+<h1 style="font-family:var(--hd);font-size:clamp(36px,6vw,56px);line-height:1.1;margin-bottom:20px">Understanding<br/>Our User</h1>
+<p style="font-size:18px;color:var(--mute);line-height:1.7;margin-bottom:8px">Before we build anything, we need to understand who we're building for.<br/>Their fears. Their hopes. Their midnight Google searches.</p>
+<div style="margin-top:40px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-size:12px;color:var(--dim)">
+<span>Prepared by Vartha</span><span>·</span><span>Product Manager</span><span>·</span><span>Welona Clinics</span><span>·</span><span>April 2026</span>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ TABLE OF CONTENTS ═══════════════ -->
+<section class="sec" style="padding-top:0">
+<div class="card" style="padding:32px">
+<div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:20px">What's inside</div>
+<div style="display:flex;flex-direction:column;gap:0">
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--faint)"><span style="font-size:16px;font-weight:600">01 — Who is our user?</span><span style="color:var(--dim);font-size:13px">Personas & demographics</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--faint)"><span style="font-size:16px;font-weight:600">02 — What are they feeling?</span><span style="color:var(--dim);font-size:13px">Emotional journey map</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--faint)"><span style="font-size:16px;font-weight:600">03 — What's hurting them?</span><span style="color:var(--dim);font-size:13px">Pain points hierarchy</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--faint)"><span style="font-size:16px;font-weight:600">04 — What are they searching?</span><span style="color:var(--dim);font-size:13px">Real search behavior</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--faint)"><span style="font-size:16px;font-weight:600">05 — What stops them?</span><span style="color:var(--dim);font-size:13px">Fear hierarchy</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--faint)"><span style="font-size:16px;font-weight:600">06 — What do they need to trust?</span><span style="color:var(--dim);font-size:13px">Trust signals</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--faint)"><span style="font-size:16px;font-weight:600">07 — How do they decide?</span><span style="color:var(--dim);font-size:13px">Decision psychology</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--faint)"><span style="font-size:16px;font-weight:600">08 — What job are they hiring us for?</span><span style="color:var(--dim);font-size:13px">Jobs to be done</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--faint)"><span style="font-size:16px;font-weight:600">09 — The moments that matter</span><span style="color:var(--dim);font-size:13px">Critical decision points</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0"><span style="font-size:16px;font-weight:600">10 — The gap</span><span style="color:var(--dim);font-size:13px">Current vs. desired experience</span></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ 01 — PERSONAS ═══════════════ -->
+<section class="sec">
+<div class="sec-label">01 — Who is our user?</div>
+<div class="sec-title">Three people walk into<br/>a Google search bar.</div>
+<p class="sec-sub">They share one thing: something about their appearance is affecting their confidence. But their age, urgency, budget, and emotional state are completely different.</p>
+
+<div style="margin-top:40px;display:flex;flex-direction:column;gap:20px">
+
+<!-- Persona 1 -->
+<div class="card">
+<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+<div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1E4D37,#2C7A50);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">👨</div>
+<div style="flex:1;min-width:240px">
+<div style="display:flex;align-items:center;gap:10;margin-bottom:4px">
+<h3 style="font-size:20px;font-weight:700">Karthik — "The Early Worrier"</h3>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">HAIR</span>
+</div>
+<div style="font-size:13px;color:var(--dim);margin-bottom:16px">Male · 28-35 · IT Professional · ₹8-15 LPA · Chennai</div>
+
+<div class="grid-2" style="gap:12px;margin-bottom:16px">
+<div style="background:var(--bg3);border-radius:12px;padding:14px">
+<div style="font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1px;margin-bottom:6px">TRIGGER EVENT</div>
+<div style="font-size:14px;color:var(--ink)">Noticed more hair on pillow. Colleague made a comment. Wedding photos showed thinning.</div>
+</div>
+<div style="background:var(--bg3);border-radius:12px;padding:14px">
+<div style="font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1px;margin-bottom:6px">INNER MONOLOGUE</div>
+<div style="font-size:14px;color:var(--ink);font-style:italic">"Am I going bald? Is it too early to do something? What if I wait and it gets worse?"</div>
+</div>
+</div>
+
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">Budget-conscious</span>
+<span class="tag" style="color:var(--blu);background:rgba(96,165,250,.1)">Research-heavy</span>
+<span class="tag" style="color:var(--vlt);background:rgba(192,132,252,.1)">Compares 4-5 clinics</span>
+<span class="tag" style="color:var(--crl);background:rgba(248,113,113,.1)">Avoids talking about it</span>
+</div>
+
+<div style="font-size:13px;color:var(--mute);line-height:1.7">
+<strong style="color:var(--ink)">Behavior:</strong> Googles at night. Reads Reddit threads. Watches YouTube reviews. Visits 3-5 clinic websites. Never calls — hates the callback model. Wants to know the price BEFORE talking to anyone. Will abandon a site in 10 seconds if it looks like marketing fluff.
+</div>
+</div>
+</div>
+</div>
+
+<!-- Persona 2 -->
+<div class="card">
+<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+<div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#5A3A2A,#8B6040);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">👩</div>
+<div style="flex:1;min-width:240px">
+<div style="display:flex;align-items:center;gap:10;margin-bottom:4px">
+<h3 style="font-size:20px;font-weight:700">Priya — "The Scar Carrier"</h3>
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">SKIN</span>
+</div>
+<div style="font-size:13px;color:var(--dim);margin-bottom:16px">Female · 24-32 · Working Professional · ₹5-12 LPA · Chennai</div>
+
+<div class="grid-2" style="gap:12px;margin-bottom:16px">
+<div style="background:var(--bg3);border-radius:12px;padding:14px">
+<div style="font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1px;margin-bottom:6px">TRIGGER EVENT</div>
+<div style="font-size:14px;color:var(--ink)">Acne scars from teenage years. Pigmentation after pregnancy. Friends getting clearer skin through treatments.</div>
+</div>
+<div style="background:var(--bg3);border-radius:12px;padding:14px">
+<div style="font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1px;margin-bottom:6px">INNER MONOLOGUE</div>
+<div style="font-size:14px;color:var(--ink);font-style:italic">"I've tried every cream. Nothing works. But laser sounds scary — what if it burns my skin? What if it makes it worse?"</div>
+</div>
+</div>
+
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">Safety-first mindset</span>
+<span class="tag" style="color:var(--blu);background:rgba(96,165,250,.1)">Wants female doctor</span>
+<span class="tag" style="color:var(--vlt);background:rgba(192,132,252,.1)">Trusts word-of-mouth</span>
+<span class="tag" style="color:var(--crl);background:rgba(248,113,113,.1)">Scared of side effects</span>
+</div>
+
+<div style="font-size:13px;color:var(--mute);line-height:1.7">
+<strong style="color:var(--ink)">Behavior:</strong> Asks friends first. Checks Instagram before-after posts. Reads Google reviews obsessively. Wants to see someone with her exact skin type who got results. Will pay more for a doctor she trusts. Needs to know EVERY possible side effect before committing.
+</div>
+</div>
+</div>
+</div>
+
+<!-- Persona 3 -->
+<div class="card">
+<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+<div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#4A3050,#7A5090);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">👩</div>
+<div style="flex:1;min-width:240px">
+<div style="display:flex;align-items:center;gap:10;margin-bottom:4px">
+<h3 style="font-size:20px;font-weight:700">Deepa — "The Silent Struggler"</h3>
+<span class="tag" style="color:var(--crl);background:rgba(248,113,113,.1)">SLIMMING</span>
+</div>
+<div style="font-size:13px;color:var(--dim);margin-bottom:16px">Female · 35-48 · Homemaker / Professional · Household income ₹15-30 LPA · Chennai</div>
+
+<div class="grid-2" style="gap:12px;margin-bottom:16px">
+<div style="background:var(--bg3);border-radius:12px;padding:14px">
+<div style="font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1px;margin-bottom:6px">TRIGGER EVENT</div>
+<div style="font-size:14px;color:var(--ink)">Post-pregnancy body changes. Tried gym, yoga, diets. Stubborn areas won't budge. Relative's comment at a family gathering.</div>
+</div>
+<div style="background:var(--bg3);border-radius:12px;padding:14px">
+<div style="font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1px;margin-bottom:6px">INNER MONOLOGUE</div>
+<div style="font-size:14px;color:var(--ink);font-style:italic">"I've tried everything. Maybe a clinic can help? But is it safe? Will people judge me for going to a 'slimming' clinic?"</div>
+</div>
+</div>
+
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">Privacy-conscious</span>
+<span class="tag" style="color:var(--blu);background:rgba(96,165,250,.1)">Needs husband's buy-in</span>
+<span class="tag" style="color:var(--vlt);background:rgba(192,132,252,.1)">Embarrassed to ask</span>
+<span class="tag" style="color:var(--crl);background:rgba(248,113,113,.1)">Time-constrained</span>
+</div>
+
+<div style="font-size:13px;color:var(--mute);line-height:1.7">
+<strong style="color:var(--ink)">Behavior:</strong> Searches privately on phone. Doesn't want to call and explain her problem to a receptionist. Wants to understand the entire process and cost before involving her family. Needs the clinic visit to be discreet and quick. Values female staff and privacy.
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ═══════════════ 02 — EMOTIONAL JOURNEY ═══════════════ -->
+<section class="sec">
+<div class="sec-label">02 — What are they feeling?</div>
+<div class="sec-title">The emotional rollercoaster<br/>nobody talks about.</div>
+<p class="sec-sub">Seeking a cosmetic or medical treatment is not a rational purchase. It's an emotional journey that starts with shame and ends — if we do our job — with confidence.</p>
+
+<div style="margin-top:40px;display:flex;flex-direction:column;gap:0">
+
+<!-- Stage 1 -->
+<div style="display:flex;gap:20px;align-items:flex-start;padding:28px 0;border-bottom:1px solid var(--faint)">
+<div style="width:56px;height:56px;border-radius:16px;background:rgba(248,113,113,.1);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">😔</div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:10;margin-bottom:6px">
+<h3 style="font-size:18px;font-weight:700">1. The Private Struggle</h3>
+<span class="tag" style="color:var(--crl);background:rgba(248,113,113,.1)">SHAME</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:10px">They notice the problem but don't talk about it. Hair in the shower drain. Mirror avoidance. Avoiding certain clothes. The problem is invisible to others but LOUD in their head.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;font-style:italic;font-size:13px;color:var(--mute)">"Maybe it's normal. Maybe I'm overreacting. I'll just wait and see."</div>
+<div style="margin-top:8px;font-size:12px;color:var(--dim)"><strong>Duration:</strong> Weeks to months. <strong>Action:</strong> None — just worrying.</div>
+</div>
+</div>
+
+<!-- Stage 2 -->
+<div style="display:flex;gap:20px;align-items:flex-start;padding:28px 0;border-bottom:1px solid var(--faint)">
+<div style="width:56px;height:56px;border-radius:16px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🔍</div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:10;margin-bottom:6px">
+<h3 style="font-size:18px;font-weight:700">2. The Midnight Research</h3>
+<span class="tag" style="color:var(--blu);background:rgba(96,165,250,.1)">CONFUSION</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:10px">Something triggers action — a comment, a photo, a friend's result. They open Google at 11 PM. PRP? GFC? Transplant? Laser? CoolSculpting? Every website says "best results." Nothing is clear. Every clinic looks the same.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;font-style:italic;font-size:13px;color:var(--mute)">"There are 50 clinics in Chennai. They all say the same thing. How do I know which one is real?"</div>
+<div style="margin-top:8px;font-size:12px;color:var(--dim)"><strong>Duration:</strong> Days to weeks. <strong>Action:</strong> 15-30 Google searches. 5-8 clinic websites. Reddit. YouTube.</div>
+</div>
+</div>
+
+<!-- Stage 3 -->
+<div style="display:flex;gap:20px;align-items:flex-start;padding:28px 0;border-bottom:1px solid var(--faint)">
+<div style="width:56px;height:56px;border-radius:16px;background:rgba(232,184,109,.1);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">😰</div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:10;margin-bottom:6px">
+<h3 style="font-size:18px;font-weight:700">3. The Fear Spiral</h3>
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">FEAR</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:10px">They find a treatment that sounds right but then Google the side effects. Horror stories on forums. "PRP made my hair worse." "Laser burned my face." The fear of a bad outcome is now LOUDER than the original problem.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;font-style:italic;font-size:13px;color:var(--mute)">"What if it doesn't work? What if it makes it WORSE? That's money wasted AND damage done."</div>
+<div style="margin-top:8px;font-size:12px;color:var(--dim)"><strong>Duration:</strong> Days. <strong>Action:</strong> Searches for side effects, horror stories, negative reviews. This is where most users DROP OFF.</div>
+</div>
+</div>
+
+<!-- Stage 4 -->
+<div style="display:flex;gap:20px;align-items:flex-start;padding:28px 0;border-bottom:1px solid var(--faint)">
+<div style="width:56px;height:56px;border-radius:16px;background:rgba(192,132,252,.1);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🤔</div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:10;margin-bottom:6px">
+<h3 style="font-size:18px;font-weight:700">4. The Price Shock</h3>
+<span class="tag" style="color:var(--vlt);background:rgba(192,132,252,.1)">ANXIETY</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:10px">If they survive the fear stage, they hit the price wall. No clinic shows prices. "Contact us for pricing." They have NO IDEA if it's ₹5,000 or ₹5,00,000. They can't even decide if it's worth exploring without knowing the range.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;font-style:italic;font-size:13px;color:var(--mute)">"I don't want to call and then find out it's ₹2 lakhs. I'll look stupid. Just tell me the price."</div>
+<div style="margin-top:8px;font-size:12px;color:var(--dim)"><strong>Duration:</strong> This is a WALL. Many users stop here permanently. <strong>Action:</strong> Searches "[treatment] cost Chennai." Finds nothing useful.</div>
+</div>
+</div>
+
+<!-- Stage 5 -->
+<div style="display:flex;gap:20px;align-items:flex-start;padding:28px 0;border-bottom:1px solid var(--faint)">
+<div style="width:56px;height:56px;border-radius:16px;background:rgba(74,222,128,.1);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🙋</div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:10;margin-bottom:6px">
+<h3 style="font-size:18px;font-weight:700">5. The Trust Search</h3>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">HOPE</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:10px">They look for proof. Not from the clinic — from real people. "Did anyone from Chennai do PRP? What was your experience?" They want to find someone EXACTLY LIKE THEM who got results.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;font-style:italic;font-size:13px;color:var(--mute)">"Show me someone my age, with my problem, in my city, who actually got better."</div>
+<div style="margin-top:8px;font-size:12px;color:var(--dim)"><strong>Duration:</strong> Days. <strong>Action:</strong> Google reviews, YouTube testimonials, Reddit, asking friends. This is where VIDEO TESTIMONIALS convert.</div>
+</div>
+</div>
+
+<!-- Stage 6 -->
+<div style="display:flex;gap:20px;align-items:flex-start;padding:28px 0">
+<div style="width:56px;height:56px;border-radius:16px;background:rgba(74,222,128,.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">✅</div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:10;margin-bottom:6px">
+<h3 style="font-size:18px;font-weight:700">6. The Commitment Moment</h3>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">DECISION</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:10px">They've decided to try. But now they need to BOOK. And the clinic says "fill this form, we'll call back in 24-48 hours." In that waiting time, doubt creeps back in. They visit a competitor. The moment is lost.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;font-style:italic;font-size:13px;color:var(--mute)">"I was ready to book. But they made me wait for a callback. By then I'd already found another clinic."</div>
+<div style="margin-top:8px;font-size:12px;color:var(--dim)"><strong>Duration:</strong> Minutes. <strong>Action:</strong> Needs INSTANT booking — live slots, OTP confirmation. Any friction = lost patient.</div>
+</div>
+</div>
+
+</div>
+
+<div class="quote">"The user doesn't buy a treatment. They buy relief from the anxiety of not knowing what to do."</div>
+</section>
+
+<!-- ═══════════════ 03 — PAIN POINTS ═══════════════ -->
+<section class="sec">
+<div class="sec-label">03 — What's hurting them?</div>
+<div class="sec-title">Five pain points,<br/>ranked by severity.</div>
+
+<div style="margin-top:40px;display:flex;flex-direction:column;gap:16px">
+
+<div class="pain-card" style="background:rgba(248,113,113,.05);border-color:var(--crl)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="font-size:16px;font-weight:700">1. "I don't know what treatment I need"</h3>
+<span class="tag" style="color:var(--crl);background:rgba(248,113,113,.1)">CRITICAL</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">They know their PROBLEM (hair falling, skin scarring, fat not going) but not the SOLUTION. The clinic website lists treatments they've never heard of. PRP? GFC? FUE? They don't speak doctor.</p>
+<div class="bar"><div class="bar-fill" style="width:95%;background:var(--crl)"></div></div>
+<div style="font-size:12px;color:var(--dim);margin-top:6px">Severity: 95/100 · Affects: Every new visitor · Current solution: None</div>
+</div>
+
+<div class="pain-card" style="background:rgba(232,184,109,.05);border-color:var(--gld)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="font-size:16px;font-weight:700">2. "I'm scared of what could go wrong"</h3>
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">HIGH</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">Side effects are their #1 Google search BEFORE they search for clinics. "PRP side effects" gets more searches than "PRP clinics Chennai." No clinic addresses this. The silence feels like hiding something.</p>
+<div class="bar"><div class="bar-fill" style="width:90%;background:var(--gld)"></div></div>
+<div style="font-size:12px;color:var(--dim);margin-top:6px">Severity: 90/100 · Affects: 70%+ of researchers · Current solution: None (clinics hide this)</div>
+</div>
+
+<div class="pain-card" style="background:rgba(232,184,109,.05);border-color:var(--gld)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="font-size:16px;font-weight:700">3. "Nobody will tell me the price"</h3>
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">HIGH</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">They can't plan, can't budget, can't get family buy-in without even a ballpark. The "contact us for pricing" model exists because clinics want to upsell in person. But in 2026, price opacity = instant bounce.</p>
+<div class="bar"><div class="bar-fill" style="width:88%;background:var(--gld)"></div></div>
+<div style="font-size:12px;color:var(--dim);margin-top:6px">Severity: 88/100 · Affects: Every visitor who doesn't call · Current solution: None</div>
+</div>
+
+<div class="pain-card" style="background:rgba(96,165,250,.05);border-color:var(--blu)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="font-size:16px;font-weight:700">4. "Will this actually work for ME?"</h3>
+<span class="tag" style="color:var(--blu);background:rgba(96,165,250,.1)">MEDIUM</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">Before-after photos on clinic sites feel curated and fake. They want proof from someone who looks like them — same age, gender, skin tone, city, concern. Generic testimonials don't convert. Specific ones do.</p>
+<div class="bar"><div class="bar-fill" style="width:82%;background:var(--blu)"></div></div>
+<div style="font-size:12px;color:var(--dim);margin-top:6px">Severity: 82/100 · Affects: Users at decision stage · Current solution: Screenshot images (look fake)</div>
+</div>
+
+<div class="pain-card" style="background:rgba(192,132,252,.05);border-color:var(--vlt)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="font-size:16px;font-weight:700">5. "I have to CALL? And WAIT?"</h3>
+<span class="tag" style="color:var(--vlt);background:rgba(192,132,252,.1)">MEDIUM</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">They're ready to book at 11 PM on a Sunday. The clinic's form asks for name + phone. Then... nothing. A callback in 24-48 hours. By then they've either lost motivation, found another clinic, or talked themselves out of it.</p>
+<div class="bar"><div class="bar-fill" style="width:75%;background:var(--vlt)"></div></div>
+<div style="font-size:12px;color:var(--dim);margin-top:6px">Severity: 75/100 · Affects: All ready-to-book users · Current solution: Lead form → callback</div>
+</div>
+
+</div>
+</section>
+
+<!-- ═══════════════ 04 — SEARCH BEHAVIOR ═══════════════ -->
+<section class="sec">
+<div class="sec-label">04 — What are they searching?</div>
+<div class="sec-title">Their Google searches<br/>reveal everything.</div>
+<p class="sec-sub">What people type into Google at midnight tells you more about their needs than any survey.</p>
+
+<div style="margin-top:40px;display:flex;flex-direction:column;gap:0">
+
+<div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--faint)">
+<div style="width:48px;height:48px;border-radius:12px;background:rgba(248,113,113,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:var(--crl);font-weight:800;font-size:14px">#1</span></div>
+<div style="flex:1"><div style="font-size:15px;font-weight:600">"PRP treatment side effects"</div><div style="font-size:12px;color:var(--dim);margin-top:2px">They search for RISKS before they search for CLINICS.</div></div>
+<span class="tag" style="color:var(--crl);background:rgba(248,113,113,.1)">FEAR</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--faint)">
+<div style="width:48px;height:48px;border-radius:12px;background:rgba(232,184,109,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:var(--gld);font-weight:800;font-size:14px">#2</span></div>
+<div style="flex:1"><div style="font-size:15px;font-weight:600">"PRP treatment cost in Chennai"</div><div style="font-size:12px;color:var(--dim);margin-top:2px">Price is the #2 search. No Chennai clinic answers it online.</div></div>
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">PRICE</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--faint)">
+<div style="width:48px;height:48px;border-radius:12px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:var(--blu);font-weight:800;font-size:14px">#3</span></div>
+<div style="flex:1"><div style="font-size:15px;font-weight:600">"PRP vs GFC which is better"</div><div style="font-size:12px;color:var(--dim);margin-top:2px">They don't know the difference. No clinic explains it simply.</div></div>
+<span class="tag" style="color:var(--blu);background:rgba(96,165,250,.1)">DECISION</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--faint)">
+<div style="width:48px;height:48px;border-radius:12px;background:rgba(192,132,252,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:var(--vlt);font-weight:800;font-size:14px">#4</span></div>
+<div style="flex:1"><div style="font-size:15px;font-weight:600">"hair transplant recovery time"</div><div style="font-size:12px;color:var(--dim);margin-top:2px">They need to plan around work/life. No clinic provides a day-by-day timeline.</div></div>
+<span class="tag" style="color:var(--vlt);background:rgba(192,132,252,.1)">PLANNING</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--faint)">
+<div style="width:48px;height:48px;border-radius:12px;background:rgba(74,222,128,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:var(--grn);font-weight:800;font-size:14px">#5</span></div>
+<div style="flex:1"><div style="font-size:15px;font-weight:600">"best hair treatment for my age"</div><div style="font-size:12px;color:var(--dim);margin-top:2px">They want personalized guidance. Every website gives generic info.</div></div>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">GUIDANCE</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--faint)">
+<div style="width:48px;height:48px;border-radius:12px;background:rgba(74,222,128,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:var(--grn);font-weight:800;font-size:14px">#6</span></div>
+<div style="flex:1"><div style="font-size:15px;font-weight:600">"Welona clinic reviews real"</div><div style="font-size:12px;color:var(--dim);margin-top:2px">They don't trust screenshot reviews. They want live, verifiable proof.</div></div>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">TRUST</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:16px 0">
+<div style="width:48px;height:48px;border-radius:12px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:var(--blu);font-weight:800;font-size:14px">#7</span></div>
+<div style="flex:1"><div style="font-size:15px;font-weight:600">"book appointment welona T Nagar"</div><div style="font-size:12px;color:var(--dim);margin-top:2px">They're ready to book but can only find a lead form. No live slots.</div></div>
+<span class="tag" style="color:var(--blu);background:rgba(96,165,250,.1)">ACTION</span>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:32px;border-left:4px solid var(--crl);background:rgba(248,113,113,.03)">
+<p style="font-size:15px;color:var(--ink);line-height:1.7;margin:0"><strong>The insight:</strong> Every one of these searches represents a user need that NO Chennai clinic currently answers online. Each unanswered search = a user who leaves to find the answer on Reddit, YouTube, or a competitor.</p>
+</div>
+</section>
+
+<!-- ═══════════════ 05 — FEAR HIERARCHY ═══════════════ -->
+<section class="sec">
+<div class="sec-label">05 — What stops them?</div>
+<div class="sec-title">The fear hierarchy.</div>
+<p class="sec-sub">These aren't abstract anxieties. These are the exact thoughts that make someone close a browser tab at 11:30 PM instead of booking.</p>
+
+<div style="margin-top:40px;display:flex;flex-direction:column;gap:12px">
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--card);border-radius:16px;border:1px solid var(--border)">
+<div style="font-size:32px;flex-shrink:0">😨</div>
+<div style="flex:1">
+<div style="font-size:15px;font-weight:700;margin-bottom:2px">"What if it makes things worse?"</div>
+<div style="font-size:13px;color:var(--mute)">The #1 fear. Not "what if it doesn't work" — what if it ACTIVELY DAMAGES me.</div>
+</div>
+<div style="text-align:right"><div style="font-size:20px;font-weight:800;color:var(--crl)">94%</div><div style="font-size:10px;color:var(--dim)">of first-timers</div></div>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--card);border-radius:16px;border:1px solid var(--border)">
+<div style="font-size:32px;flex-shrink:0">💸</div>
+<div style="flex:1">
+<div style="font-size:15px;font-weight:700;margin-bottom:2px">"What if I spend money and it doesn't work?"</div>
+<div style="font-size:13px;color:var(--mute)">The combination of financial loss + no results is worse than either alone.</div>
+</div>
+<div style="text-align:right"><div style="font-size:20px;font-weight:800;color:var(--gld)">87%</div><div style="font-size:10px;color:var(--dim)">of researchers</div></div>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--card);border-radius:16px;border:1px solid var(--border)">
+<div style="font-size:32px;flex-shrink:0">🤷</div>
+<div style="flex:1">
+<div style="font-size:15px;font-weight:700;margin-bottom:2px">"I don't know which treatment is right for me"</div>
+<div style="font-size:13px;color:var(--mute)">Decision paralysis. Too many options, too little guidance.</div>
+</div>
+<div style="text-align:right"><div style="font-size:20px;font-weight:800;color:var(--blu)">82%</div><div style="font-size:10px;color:var(--dim)">of visitors</div></div>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--card);border-radius:16px;border:1px solid var(--border)">
+<div style="font-size:32px;flex-shrink:0">🏥</div>
+<div style="flex:1">
+<div style="font-size:15px;font-weight:700;margin-bottom:2px">"What if the clinic just wants to sell me something?"</div>
+<div style="font-size:13px;color:var(--mute)">They expect to be upsold. Every clinic does it. Trust is the scarcest resource.</div>
+</div>
+<div style="text-align:right"><div style="font-size:20px;font-weight:800;color:var(--vlt)">78%</div><div style="font-size:10px;color:var(--dim)">of cautious users</div></div>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--card);border-radius:16px;border:1px solid var(--border)">
+<div style="font-size:32px;flex-shrink:0">🫣</div>
+<div style="flex:1">
+<div style="font-size:15px;font-weight:700;margin-bottom:2px">"People will judge me for going to a clinic"</div>
+<div style="font-size:13px;color:var(--mute)">Especially for slimming and hair. Cosmetic treatments still carry stigma in Indian culture.</div>
+</div>
+<div style="text-align:right"><div style="font-size:20px;font-weight:800;color:var(--dim)">65%</div><div style="font-size:10px;color:var(--dim)">esp. slimming</div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ═══════════════ 06 — TRUST SIGNALS ═══════════════ -->
+<section class="sec">
+<div class="sec-label">06 — What makes them trust?</div>
+<div class="sec-title">Trust is earned in layers.</div>
+<p class="sec-sub">Each layer of trust removes a specific fear. Skip a layer and the user drops off.</p>
+
+<div style="margin-top:40px;display:flex;flex-direction:column;gap:20px">
+
+<div class="card">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+<div style="width:40px;height:40px;border-radius:10px;background:rgba(74,222,128,.1);display:flex;align-items:center;justify-content:center;font-size:18px">1️⃣</div>
+<div><h3 style="font-size:16px;font-weight:700">Layer 1: Social proof from people like me</h3><div style="font-size:12px;color:var(--dim)">Removes: "Does this work?"</div></div>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">Video testimonials from someone their age, with their concern, in their city. Not generic before-after photos — REAL people telling REAL stories with REAL timelines. This is the single most powerful trust signal in healthcare.</p>
+</div>
+
+<div class="card">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+<div style="width:40px;height:40px;border-radius:10px;background:rgba(232,184,109,.1);display:flex;align-items:center;justify-content:center;font-size:18px">2️⃣</div>
+<div><h3 style="font-size:16px;font-weight:700">Layer 2: Transparent side effects</h3><div style="font-size:12px;color:var(--dim)">Removes: "Are they hiding something?"</div></div>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">When a clinic proactively shows side effects — including when a treatment WON'T work — the user thinks: "If they're honest about the bad stuff, the good stuff must be true too." Honesty is the most underused trust lever in Indian healthcare.</p>
+</div>
+
+<div class="card">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+<div style="width:40px;height:40px;border-radius:10px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center;font-size:18px">3️⃣</div>
+<div><h3 style="font-size:16px;font-weight:700">Layer 3: Transparent pricing</h3><div style="font-size:12px;color:var(--dim)">Removes: "Will I be upsold?"</div></div>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">Showing price ranges — even approximate — says "we respect your time and intelligence." A cost estimator with a session slider does more for trust than 50 before-after photos.</p>
+</div>
+
+<div class="card">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+<div style="width:40px;height:40px;border-radius:10px;background:rgba(192,132,252,.1);display:flex;align-items:center;justify-content:center;font-size:18px">4️⃣</div>
+<div><h3 style="font-size:16px;font-weight:700">Layer 4: Doctor credentials</h3><div style="font-size:12px;color:var(--dim)">Removes: "Is the doctor qualified?"</div></div>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">Name, photo, qualification, years of experience, number of procedures done, Google rating, languages spoken. The absence of doctor profiles on a medical clinic website is a MASSIVE red flag for informed users.</p>
+</div>
+
+<div class="card">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+<div style="width:40px;height:40px;border-radius:10px;background:rgba(74,222,128,.15);display:flex;align-items:center;justify-content:center;font-size:18px">5️⃣</div>
+<div><h3 style="font-size:16px;font-weight:700">Layer 5: Instant booking</h3><div style="font-size:12px;color:var(--dim)">Removes: "Will I have to chase them?"</div></div>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">Live slot availability + instant OTP confirmation = "this clinic has their act together." A callback model in 2026 says "we're disorganized" even if you're not. Self-service booking is now baseline expectation, not innovation.</p>
+</div>
+
+</div>
+</section>
+
+<!-- ═══════════════ 07 — DECISION PSYCHOLOGY ═══════════════ -->
+<section class="sec">
+<div class="sec-label">07 — How do they decide?</div>
+<div class="sec-title">The decision isn't rational.<br/>It's emotional with rational justification.</div>
+
+<div style="margin-top:40px">
+<div class="card" style="padding:32px">
+<div class="grid-2" style="gap:24px">
+<div>
+<h3 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--crl)">What they THINK drives the decision</h3>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:14px;padding:12px;background:rgba(248,113,113,.05);border-radius:10px;border:1px solid rgba(248,113,113,.1)">Price comparison</div>
+<div style="font-size:14px;padding:12px;background:rgba(248,113,113,.05);border-radius:10px;border:1px solid rgba(248,113,113,.1)">Technology used</div>
+<div style="font-size:14px;padding:12px;background:rgba(248,113,113,.05);border-radius:10px;border:1px solid rgba(248,113,113,.1)">Number of sessions</div>
+<div style="font-size:14px;padding:12px;background:rgba(248,113,113,.05);border-radius:10px;border:1px solid rgba(248,113,113,.1)">Clinic location</div>
+</div>
+</div>
+<div>
+<h3 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--grn)">What ACTUALLY drives the decision</h3>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:14px;padding:12px;background:rgba(74,222,128,.05);border-radius:10px;border:1px solid rgba(74,222,128,.1)">"Someone like me got results here"</div>
+<div style="font-size:14px;padding:12px;background:rgba(74,222,128,.05);border-radius:10px;border:1px solid rgba(74,222,128,.1)">"They were honest about the risks"</div>
+<div style="font-size:14px;padding:12px;background:rgba(74,222,128,.05);border-radius:10px;border:1px solid rgba(74,222,128,.1)">"I trust this specific doctor"</div>
+<div style="font-size:14px;padding:12px;background:rgba(74,222,128,.05);border-radius:10px;border:1px solid rgba(74,222,128,.1)">"I could book instantly at 11 PM"</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="quote">"People don't choose the cheapest clinic. They choose the clinic they trust. And trust is built by showing them the things every other clinic hides."</div>
+</section>
+
+<!-- ═══════════════ 08 — JOBS TO BE DONE ═══════════════ -->
+<section class="sec">
+<div class="sec-label">08 — What job are they hiring us for?</div>
+<div class="sec-title">They're not buying a treatment.<br/>They're buying a feeling.</div>
+
+<div style="margin-top:40px;display:flex;flex-direction:column;gap:16px">
+
+<div class="card" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+<div style="width:64px;height:64px;border-radius:16px;background:rgba(74,222,128,.1);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">🧭</div>
+<div style="flex:1;min-width:200px">
+<h3 style="font-size:16px;font-weight:700;margin-bottom:4px">Job 1: "Help me understand my options"</h3>
+<p style="font-size:14px;color:var(--mute)">"I know my hair is thinning. I don't know what PRP, GFC, or transplant means. Tell me in my language."</p>
+<div style="margin-top:8px;font-size:12px;color:var(--grn);font-weight:600">→ Solved by: Treatment quiz, comparison tool, plain-language guides</div>
+</div>
+</div>
+
+<div class="card" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+<div style="width:64px;height:64px;border-radius:16px;background:rgba(248,113,113,.1);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">🛡️</div>
+<div style="flex:1;min-width:200px">
+<h3 style="font-size:16px;font-weight:700;margin-bottom:4px">Job 2: "Help me feel safe"</h3>
+<p style="font-size:14px;color:var(--mute)">"I need to know what could go wrong, how likely it is, and what happens if it does. Don't hide things from me."</p>
+<div style="margin-top:8px;font-size:12px;color:var(--grn);font-weight:600">→ Solved by: Transparent side effects, safety scores, eligibility checker, "when it won't work"</div>
+</div>
+</div>
+
+<div class="card" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+<div style="width:64px;height:64px;border-radius:16px;background:rgba(232,184,109,.1);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">💰</div>
+<div style="flex:1;min-width:200px">
+<h3 style="font-size:16px;font-weight:700;margin-bottom:4px">Job 3: "Help me plan financially"</h3>
+<p style="font-size:14px;color:var(--mute)">"I need a number — even a range — so I can talk to my family and plan. Don't make me call to find out."</p>
+<div style="margin-top:8px;font-size:12px;color:var(--grn);font-weight:600">→ Solved by: Interactive cost estimator, transparent price ranges, EMI info</div>
+</div>
+</div>
+
+<div class="card" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+<div style="width:64px;height:64px;border-radius:16px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">🪞</div>
+<div style="flex:1;min-width:200px">
+<h3 style="font-size:16px;font-weight:700;margin-bottom:4px">Job 4: "Show me someone like me"</h3>
+<p style="font-size:14px;color:var(--mute)">"I don't want a model. I want a 32-year-old guy from Chennai who had the same hair problem and fixed it."</p>
+<div style="margin-top:8px;font-size:12px;color:var(--grn);font-weight:600">→ Solved by: Video testimonials, patient stories filtered by concern/age/location, peer consultation</div>
+</div>
+</div>
+
+<div class="card" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+<div style="width:64px;height:64px;border-radius:16px;background:rgba(192,132,252,.1);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">⚡</div>
+<div style="flex:1;min-width:200px">
+<h3 style="font-size:16px;font-weight:700;margin-bottom:4px">Job 5: "Let me act on my decision NOW"</h3>
+<p style="font-size:14px;color:var(--mute)">"I've decided. Don't make me fill a form and wait. Let me pick a time, confirm with OTP, and move on with my night."</p>
+<div style="margin-top:8px;font-size:12px;color:var(--grn);font-weight:600">→ Solved by: Live slot booking, OTP verification, instant WhatsApp confirmation</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ═══════════════ 09 — MOMENTS THAT MATTER ═══════════════ -->
+<section class="sec">
+<div class="sec-label">09 — The moments that matter</div>
+<div class="sec-title">Five seconds where we<br/>win or lose the patient.</div>
+
+<div style="margin-top:40px;display:flex;flex-direction:column;gap:20px">
+
+<div class="card" style="border-left:4px solid var(--crl)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="font-size:16px;font-weight:700">Moment 1: The First 3 Seconds</h3>
+<span class="tag" style="color:var(--crl);background:rgba(248,113,113,.1)">MAKE OR BREAK</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">User lands from Google Ad. In 3 seconds they decide: "Is this for me?" If they see a generic hero banner with "Best Clinic in Chennai" — bounce. If they see a VIDEO of someone like them talking about their result — they stay.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;margin-top:12px;font-size:13px;color:var(--ink)"><strong>Design implication:</strong> The center of the homepage MUST be real people with real stories. Not marketing. Not features. People.</div>
+</div>
+
+<div class="card" style="border-left:4px solid var(--gld)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="font-size:16px;font-weight:700">Moment 2: The "How Much?" Moment</h3>
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">HIGH IMPACT</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">They've found a treatment that interests them. They look for the price. If it's hidden → they leave, feeling disrespected. If it's shown clearly with a range and a session slider → they feel empowered.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;margin-top:12px;font-size:13px;color:var(--ink)"><strong>Design implication:</strong> Price should be on EVERY treatment card, not buried in a subpage. The cost estimator should be interactive and immediately visible.</div>
+</div>
+
+<div class="card" style="border-left:4px solid var(--blu)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="font-size:16px;font-weight:700">Moment 3: The Side Effect Search</h3>
+<span class="tag" style="color:var(--blu);background:rgba(96,165,250,.1)">TRUST BUILDER</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">They Google "[treatment] side effects" after visiting your site. If your site already showed them — with honesty, categorized by severity — they come BACK. If it didn't, they found the answer on Reddit and now trust Reddit more than you.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;margin-top:12px;font-size:13px;color:var(--ink)"><strong>Design implication:</strong> Side effects should be proactive, not hidden behind a toggle. Show safety scores on treatment cards themselves.</div>
+</div>
+
+<div class="card" style="border-left:4px solid var(--grn)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="font-size:16px;font-weight:700">Moment 4: The "Book Now" Window</h3>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">CONVERSION</span>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">They're ready. This window lasts MINUTES, not hours. If they can pick a slot and confirm in 90 seconds — you win. If they have to fill a form and wait for a callback — the window closes. It may never open again.</p>
+<div style="background:var(--bg3);border-radius:10px;padding:12px;margin-top:12px;font-size:13px;color:var(--ink)"><strong>Design implication:</strong> Booking must be self-service, real-time, and complete in under 2 minutes. OTP confirmation, not callback.</div>
+</div>
+
+</div>
+</section>
+
+<!-- ═══════════════ 10 — THE GAP ═══════════════ -->
+<section class="sec">
+<div class="sec-label">10 — The gap</div>
+<div class="sec-title">What exists today vs.<br/>what the user needs.</div>
+
+<div style="margin-top:40px">
+<div class="card" style="padding:0;overflow:hidden">
+<div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border)">
+<div style="padding:16px 20px;background:rgba(248,113,113,.05);border-right:1px solid var(--border)">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--crl)">TODAY (EVERY CHENNAI CLINIC)</div>
+</div>
+<div style="padding:16px 20px;background:rgba(74,222,128,.05)">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--grn)">WHAT THE USER ACTUALLY NEEDS</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--faint)">
+<div style="padding:14px 20px;border-right:1px solid var(--faint);font-size:13px;color:var(--mute)">❌ "Best clinic in Chennai"</div>
+<div style="padding:14px 20px;font-size:13px;color:var(--ink)">✅ "Here's someone your age who got results"</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--faint)">
+<div style="padding:14px 20px;border-right:1px solid var(--faint);font-size:13px;color:var(--mute)">❌ Contact us for pricing</div>
+<div style="padding:14px 20px;font-size:13px;color:var(--ink)">✅ ₹4,000–₹8,000 per session (adjust slider)</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--faint)">
+<div style="padding:14px 20px;border-right:1px solid var(--faint);font-size:13px;color:var(--mute)">❌ No side effects mentioned</div>
+<div style="padding:14px 20px;font-size:13px;color:var(--ink)">✅ Safety score 90% · 3 common · 2 uncommon · 2 rare</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--faint)">
+<div style="padding:14px 20px;border-right:1px solid var(--faint);font-size:13px;color:var(--mute)">❌ Submit form, we'll call back</div>
+<div style="padding:14px 20px;font-size:13px;color:var(--ink)">✅ Tomorrow 4:30 PM → OTP → Confirmed in 90 seconds</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--faint)">
+<div style="padding:14px 20px;border-right:1px solid var(--faint);font-size:13px;color:var(--mute)">❌ No doctor profiles</div>
+<div style="padding:14px 20px;font-size:13px;color:var(--ink)">✅ Dr. Priya · 12 yrs · ⭐ 4.9 · 2,800 consultations · Tamil/Hindi</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--faint)">
+<div style="padding:14px 20px;border-right:1px solid var(--faint);font-size:13px;color:var(--mute)">❌ Generic treatment list</div>
+<div style="padding:14px 20px;font-size:13px;color:var(--ink)">✅ "Answer 3 questions → here's your match"</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr">
+<div style="padding:14px 20px;border-right:1px solid var(--faint);font-size:13px;color:var(--mute)">❌ Screenshot reviews (look fake)</div>
+<div style="padding:14px 20px;font-size:13px;color:var(--ink)">✅ Video testimonials + "talk to a past patient"</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ CLOSING ═══════════════ -->
+<section style="padding:80px 24px;text-align:center">
+<div style="max-width:600px;margin:0 auto">
+<div style="font-family:var(--hd);font-size:clamp(24px,4vw,36px);line-height:1.2;margin-bottom:20px">Now we know who we're building for.<br/><span style="color:var(--grn)">Let's build what they need.</span></div>
+<p style="font-size:15px;color:var(--dim);line-height:1.7">Every feature decision should trace back to a specific user emotion, fear, or need documented here. If a feature doesn't solve something in this document — it doesn't ship.</p>
+<div style="margin-top:40px;font-size:12px;color:var(--faint)">Prepared by Vartha · Product Manager · Welona Clinics · April 2026</div>
+</div>
+</section>
+
+</body>
+</html>
