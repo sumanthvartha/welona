@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>The Path — Welona Product Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0C0F0E;--bg2:#141918;--bg3:#1C2120;--card:#1A1F1E;--border:#2A302E;
+--ink:#E8E4DC;--mute:#9A958C;--dim:#6A655E;--faint:#3A3632;
+--grn:#4ADE80;--grn-d:#166534;--gld:#E8B86D;--crl:#F87171;--blu:#60A5FA;--vlt:#C084FC;--wht:#fff;
+--hd:'DM Serif Display',Georgia,serif;--bd:'Outfit',system-ui,sans-serif}
+body{font-family:var(--bd);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.6}
+.sec{max-width:860px;margin:0 auto;padding:80px 24px}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px}
+.sec-title{font-family:var(--hd);font-size:clamp(28px,4vw,42px);line-height:1.15;margin-bottom:12px}
+.sec-sub{font-size:16px;color:var(--mute);line-height:1.7;max-width:620px}
+.card{background:var(--card);border-radius:20px;padding:28px;border:1px solid var(--border)}
+.tag{display:inline-block;padding:4px 12px;border-radius:50px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.grid-2{grid-template-columns:1fr}}
+.check{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--faint)}
+.check:last-child{border-bottom:none}
+.stage-line{display:flex;gap:20px;padding:32px 0;border-bottom:1px solid var(--faint)}
+.stage-dot{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}
+.quote{font-family:var(--hd);font-size:20px;line-height:1.5;color:var(--ink);font-style:italic;padding:24px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:40px 0}
+.tool-tag{display:inline-block;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600;background:var(--bg3);color:var(--mute);margin:2px}
+.time-tag{display:inline-block;padding:5px 14px;border-radius:50px;font-size:12px;font-weight:700;background:rgba(96,165,250,.1);color:var(--blu)}
+.gate{background:var(--bg3);border-radius:12px;padding:16px;margin-top:16px;border-left:3px solid}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<section style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px;position:relative">
+<div style="position:absolute;top:-80px;right:-80px;width:350px;height:350px;background:radial-gradient(circle,rgba(74,222,128,.06),transparent 70%);border-radius:50%"></div>
+<div style="text-align:center;max-width:660px;position:relative">
+<div style="font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--grn);margin-bottom:24px">Product Roadmap & Process Guide</div>
+<h1 style="font-family:var(--hd);font-size:clamp(36px,6vw,56px);line-height:1.1;margin-bottom:20px">The Path</h1>
+<p style="font-size:18px;color:var(--mute);line-height:1.7;margin-bottom:8px">A step-by-step guide to building the Welona product.<br/>What comes after what. What to skip. Where most people fail.</p>
+<div style="margin-top:40px;font-size:12px;color:var(--dim)">Vartha · Product Manager · April 2026</div>
+</div>
+</section>
+
+<!-- ═══════════════ THE BIG PICTURE ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--gld)">The big picture</div>
+<div class="sec-title">Building a product is not<br/>writing code.</div>
+<p class="sec-sub">Code is maybe 30% of the work. The other 70% is understanding, defining, designing, and validating. Most products fail not because the code is bad — but because they built the wrong thing beautifully.</p>
+
+<div class="quote">"The most expensive mistake in product development is building something nobody asked for."</div>
+
+<p style="font-size:15px;color:var(--mute);line-height:1.8;margin-top:20px">Here are the 9 stages of building Welona, in exact order. Some you've already done. Each stage has a clear exit gate — you don't move forward until the gate is passed.</p>
+</section>
+
+<!-- ═══════════════ THE 9 STAGES OVERVIEW ═══════════════ -->
+<section class="sec" style="padding-top:0">
+<div class="card" style="padding:0;overflow:hidden">
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border);background:rgba(74,222,128,.03)">
+<div class="stage-dot" style="background:rgba(74,222,128,.15);color:var(--grn)">✓</div>
+<div style="flex:1"><div style="font-size:15px;font-weight:700">Stage 1 — Understand the Problem</div><div style="font-size:12px;color:var(--dim)">Problem diagnosis, market audit</div></div>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">DONE</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border);background:rgba(74,222,128,.03)">
+<div class="stage-dot" style="background:rgba(74,222,128,.15);color:var(--grn)">✓</div>
+<div style="flex:1"><div style="font-size:15px;font-weight:700">Stage 2 — Understand the User</div><div style="font-size:12px;color:var(--dim)">Personas, emotions, pain points, jobs</div></div>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">DONE</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border);background:rgba(74,222,128,.03)">
+<div class="stage-dot" style="background:rgba(74,222,128,.15);color:var(--grn)">✓</div>
+<div style="flex:1"><div style="font-size:15px;font-weight:700">Stage 3 — Define the Strategy</div><div style="font-size:12px;color:var(--dim)">Vision, north star, RICE scoring, phased roadmap</div></div>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">DONE</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border);background:rgba(232,184,109,.03)">
+<div class="stage-dot" style="background:rgba(232,184,109,.15);color:var(--gld)">4</div>
+<div style="flex:1"><div style="font-size:15px;font-weight:700">Stage 4 — Architect the Experience</div><div style="font-size:12px;color:var(--dim)">Sitemap, user flows, content plan</div></div>
+<span class="tag" style="color:var(--gld);background:rgba(232,184,109,.1)">YOU ARE HERE</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border)">
+<div class="stage-dot" style="background:var(--bg3);color:var(--dim)">5</div>
+<div style="flex:1"><div style="font-size:15px;font-weight:700">Stage 5 — Design the Interface</div><div style="font-size:12px;color:var(--dim)">Wireframes, design system, high-fidelity</div></div>
+<span class="tag" style="color:var(--dim);background:var(--bg3)">NEXT</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border)">
+<div class="stage-dot" style="background:var(--bg3);color:var(--dim)">6</div>
+<div style="flex:1"><div style="font-size:15px;font-weight:700">Stage 6 — Create the Content</div><div style="font-size:12px;color:var(--dim)">Treatment data, stories, doctor profiles, photography</div></div>
+<span class="tag" style="color:var(--dim);background:var(--bg3)">UPCOMING</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border)">
+<div class="stage-dot" style="background:var(--bg3);color:var(--dim)">7</div>
+<div style="flex:1"><div style="font-size:15px;font-weight:700">Stage 7 — Build It</div><div style="font-size:12px;color:var(--dim)">Sprint-by-sprint development</div></div>
+<span class="tag" style="color:var(--dim);background:var(--bg3)">UPCOMING</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border)">
+<div class="stage-dot" style="background:var(--bg3);color:var(--dim)">8</div>
+<div style="flex:1"><div style="font-size:15px;font-weight:700">Stage 8 — Validate & Launch</div><div style="font-size:12px;color:var(--dim)">Testing, beta, soft launch, rollout</div></div>
+<span class="tag" style="color:var(--dim);background:var(--bg3)">UPCOMING</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:16px;padding:20px 24px">
+<div class="stage-dot" style="background:var(--bg3);color:var(--dim)">9</div>
+<div style="flex:1"><div style="font-size:15px;font-weight:700">Stage 9 — Measure & Iterate</div><div style="font-size:12px;color:var(--dim)">KPIs, data analysis, Phase 2 planning</div></div>
+<span class="tag" style="color:var(--dim);background:var(--bg3)">ONGOING</span>
+</div>
+
+</div>
+</section>
+
+<!-- ═══════════════ STAGES 1-3 (DONE) ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--grn)">Stages 1-3 — Done</div>
+<div class="sec-title">What you've already built.</div>
+<p class="sec-sub">Most people jump straight to code. You didn't. You built the foundation first. Here's what you have:</p>
+
+<div style="margin-top:32px;display:flex;flex-direction:column;gap:16px">
+
+<div class="card" style="border-left:4px solid var(--grn)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+<h3 style="font-size:17px;font-weight:700">✅ Stage 1: Problem Diagnosis</h3>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">COMPLETE</span>
+</div>
+<p style="font-size:14px;color:var(--mute);margin-bottom:12px">You audited welona.in and identified every failure — hosting issues, no pricing, no side effects, dead booking funnel, fake-looking reviews.</p>
+<div style="font-size:12px;color:var(--dim)"><strong>Deliverable:</strong> Problem Diagnosis Deck (PDF) · <strong>Key insight:</strong> The site is a brochure, not a product.</div>
+</div>
+
+<div class="card" style="border-left:4px solid var(--grn)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+<h3 style="font-size:17px;font-weight:700">✅ Stage 2: User Research</h3>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">COMPLETE</span>
+</div>
+<p style="font-size:14px;color:var(--mute);margin-bottom:12px">You mapped 3 personas, 6-stage emotional journey, 5 ranked pain points, fear hierarchy, search behavior, trust signals, decision psychology, and jobs to be done.</p>
+<div style="font-size:12px;color:var(--dim)"><strong>Deliverable:</strong> User Research Document (HTML) · <strong>Key insight:</strong> Users search for side effects BEFORE clinics. Honesty is the differentiator.</div>
+</div>
+
+<div class="card" style="border-left:4px solid var(--grn)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+<h3 style="font-size:17px;font-weight:700">✅ Stage 3: Product Strategy</h3>
+<span class="tag" style="color:var(--grn);background:rgba(74,222,128,.1)">COMPLETE</span>
+</div>
+<p style="font-size:14px;color:var(--mute);margin-bottom:12px">You defined the vision, north star metric (consultation-to-treatment conversion), RICE-scored 21 features, created a 4-phase roadmap, and established 5 design principles.</p>
+<div style="font-size:12px;color:var(--dim)"><strong>Deliverable:</strong> Product Strategy Blueprint (DOCX) · <strong>Key insight:</strong> Honesty as competitive advantage. Features sequenced by dependency, not just RICE score.</div>
+</div>
+
+</div>
+
+<div class="quote">"You've done more strategic work than 90% of startups do before writing their first line of code. That's not a head start — that's the difference between building a product and building a mess."</div>
+</section>
+
+<!-- ═══════════════ STAGE 4 — ARCHITECT ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--gld)">Stage 4 — You are here</div>
+<div class="sec-title">Architect the Experience.</div>
+<p class="sec-sub">Before designing screens, you need to design the STRUCTURE. Where does every page live? How does the user flow from one to the next? What content needs to exist?</p>
+
+<div style="margin-top:32px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+<span class="time-tag">⏱ 1-2 weeks</span>
+<span style="font-size:13px;color:var(--dim)">Can be done while Stage 5 starts in parallel</span>
+</div>
+
+<h3 style="font-size:18px;font-weight:700;margin-bottom:16px">What you need to produce:</h3>
+
+<!-- Deliverable 1 -->
+<div class="card" style="margin-bottom:16px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+<div style="width:32px;height:32px;border-radius:8px;background:rgba(232,184,109,.1);display:flex;align-items:center;justify-content:center;font-size:16px">📐</div>
+<h4 style="font-size:16px;font-weight:700">4A. Sitemap</h4>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:14px">A visual tree of every page on the website and how they connect. This is the skeleton. Every page must have a clear purpose mapped to a user emotion from the research doc.</p>
+<div style="background:var(--bg3);border-radius:12px;padding:16px;font-size:13px;color:var(--mute);line-height:1.8">
+<strong style="color:var(--ink)">Pages to map:</strong><br/>
+Homepage → Branch Landing (×3) → Treatment Category → Treatment Detail (×5) → Quiz (6 steps) → Quiz Result → Compare Tool → Patient Stories → Doctor Profiles → Booking Flow → Confirmation<br/><br/>
+<strong style="color:var(--ink)">For each page, answer:</strong><br/>
+• What user emotion does this page serve?<br/>
+• Where does the user come FROM?<br/>
+• Where do they go NEXT?<br/>
+• What's the ONE thing this page must accomplish?
+</div>
+<div style="display:flex;gap:4px;margin-top:12px">
+<span class="tool-tag">Figma (FigJam)</span><span class="tool-tag">Whimsical</span><span class="tool-tag">Even pen + paper</span>
+</div>
+</div>
+
+<!-- Deliverable 2 -->
+<div class="card" style="margin-bottom:16px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+<div style="width:32px;height:32px;border-radius:8px;background:rgba(232,184,109,.1);display:flex;align-items:center;justify-content:center;font-size:16px">🔀</div>
+<h4 style="font-size:16px;font-weight:700">4B. User Flows</h4>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:14px">Step-by-step paths for each key journey. Not just "user clicks button" — include the EMOTION at each step and what information they need to feel confident moving forward.</p>
+<div style="background:var(--bg3);border-radius:12px;padding:16px;font-size:13px;color:var(--mute);line-height:1.8">
+<strong style="color:var(--ink)">5 flows to map:</strong><br/>
+1. <strong style="color:var(--grn)">Discovery Flow:</strong> Google Ad → Land → See proof → Take quiz → Get recommendation → View treatment → Book<br/>
+2. <strong style="color:var(--grn)">Research Flow:</strong> Land → Browse treatments → Compare → Read side effects → Check eligibility → Book<br/>
+3. <strong style="color:var(--grn)">Trust Flow:</strong> Land → Watch video stories → Find "someone like me" → View their treatment → Book<br/>
+4. <strong style="color:var(--grn)">Booking Flow:</strong> Select branch → Pick date → Pick time → Phone → OTP → Confirmed<br/>
+5. <strong style="color:var(--grn)">Return Flow:</strong> Existing patient → Check progress → Book next session
+</div>
+<div style="display:flex;gap:4px;margin-top:12px">
+<span class="tool-tag">Figma</span><span class="tool-tag">Miro</span><span class="tool-tag">Whimsical</span>
+</div>
+</div>
+
+<!-- Deliverable 3 -->
+<div class="card" style="margin-bottom:16px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+<div style="width:32px;height:32px;border-radius:8px;background:rgba(232,184,109,.1);display:flex;align-items:center;justify-content:center;font-size:16px">📝</div>
+<h4 style="font-size:16px;font-weight:700">4C. Content Inventory</h4>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:14px">List EVERY piece of content that needs to exist before you can build. This is often the longest lead time — you can't design a treatment page without the treatment data.</p>
+<div style="background:var(--bg3);border-radius:12px;padding:16px;font-size:13px;color:var(--mute);line-height:1.8">
+<strong style="color:var(--ink)">Content needed per treatment (×5 treatments):</strong><br/>
+• Plain-language description (what is it, how it works, 4 steps)<br/>
+• Price range (min–max per session/total)<br/>
+• Side effects (common, uncommon, rare — each with duration)<br/>
+• Safety score + "honest truth" paragraph + "when it won't work"<br/>
+• Eligibility criteria (3 yes/no questions)<br/>
+• Expected timeline (month-by-month progress)<br/>
+• Recommended number of sessions<br/><br/>
+
+<strong style="color:var(--ink)">Content needed per doctor (×4 doctors):</strong><br/>
+• Name, photo, qualification, specialization<br/>
+• Years of experience, consultation count<br/>
+• Languages spoken<br/>
+• Treatments they perform<br/><br/>
+
+<strong style="color:var(--ink)">Content needed per branch (×3):</strong><br/>
+• Address, landmark, phone, hours<br/>
+• Patient count, Google rating<br/>
+• Local patient stories<br/><br/>
+
+<strong style="color:var(--ink)">Patient stories (minimum 6-8):</strong><br/>
+• Name (or initials), age, location, concern<br/>
+• Treatment chosen, sessions, months to result<br/>
+• Quote (their words, not yours)<br/>
+• Video (for at least 3-4)
+</div>
+</div>
+
+<div class="gate" style="border-color:var(--gld)">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--gld);margin-bottom:6px">🚪 EXIT GATE — Stage 4</div>
+<p style="font-size:13px;color:var(--mute);margin:0">You can move to Stage 5 when you have: a complete sitemap, all 5 user flows mapped, and a content inventory with status (have it / need to create / need from clinic) for every item.</p>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ STAGE 5 — DESIGN ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--blu)">Stage 5</div>
+<div class="sec-title">Design the Interface.</div>
+<p class="sec-sub">Now — and only now — do you open a design tool. You design with the architecture as your blueprint and the user research as your compass.</p>
+
+<div style="margin-top:32px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+<span class="time-tag">⏱ 2-3 weeks</span>
+</div>
+
+<div class="card" style="margin-bottom:16px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+<div style="width:32px;height:32px;border-radius:8px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center;font-size:16px">✏️</div>
+<h4 style="font-size:16px;font-weight:700">5A. Wireframes (Low-Fidelity)</h4>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:14px">Grey boxes. No colors, no fonts, no images. Just LAYOUT and HIERARCHY. The wireframe answers: "What does the user see first? Second? Third?" This is where you decide that video testimonials go in the CENTER of the homepage — not tucked at the bottom.</p>
+<div style="background:var(--bg3);border-radius:12px;padding:16px;font-size:13px;color:var(--mute);line-height:1.8">
+<strong style="color:var(--ink)">Wireframe every unique screen:</strong><br/>
+Homepage · Branch page · Treatment detail · Quiz (1 screen, since layout repeats) · Compare tool · Stories page · Booking flow (3 screens) · Confirmation<br/><br/>
+<strong style="color:var(--ink)">For mobile AND desktop.</strong> 80% of your users are on phone. Design mobile first.
+</div>
+<div style="display:flex;gap:4px;margin-top:12px">
+<span class="tool-tag">Figma</span><span class="tool-tag">Balsamiq</span><span class="tool-tag">Paper sketches → photo</span>
+</div>
+</div>
+
+<div class="card" style="margin-bottom:16px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+<div style="width:32px;height:32px;border-radius:8px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center;font-size:16px">🎨</div>
+<h4 style="font-size:16px;font-weight:700">5B. Design System</h4>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:14px">Before designing pages, design the COMPONENTS. Colors, typography, buttons, cards, form inputs, badges. This ensures consistency and speeds up everything that follows.</p>
+<div style="background:var(--bg3);border-radius:12px;padding:16px;font-size:13px;color:var(--mute);line-height:1.8">
+<strong style="color:var(--ink)">Define:</strong><br/>
+• Color palette (primary, secondary, success, warning, danger, neutrals)<br/>
+• Typography scale (headings 1-4, body, caption, label)<br/>
+• Spacing system (4px base unit: 4, 8, 12, 16, 24, 32, 48, 64)<br/>
+• Button styles (primary, secondary, text, disabled)<br/>
+• Card styles (default, highlighted, interactive)<br/>
+• Form elements (input, dropdown, slider, checkbox, radio)<br/>
+• Badge/tag styles (safety scores, treatment categories)<br/>
+• Icon style (emoji vs custom SVG — decide once)
+</div>
+</div>
+
+<div class="card" style="margin-bottom:16px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+<div style="width:32px;height:32px;border-radius:8px;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center;font-size:16px">💎</div>
+<h4 style="font-size:16px;font-weight:700">5C. High-Fidelity Mockups</h4>
+</div>
+<p style="font-size:14px;color:var(--mute);line-height:1.7;margin-bottom:14px">Now add color, real content, real images. These should look like the FINAL product. Show them to 3-5 people who match your personas. Watch their faces — confusion means redesign.</p>
+<div style="background:var(--bg3);border-radius:12px;padding:16px;font-size:13px;color:var(--ink);line-height:1.8">
+<strong>🧪 Quick user test before moving on:</strong><br/>
+Show the homepage to 5 people. Ask: "What is this website for?" and "What would you do first?"<br/>
+If they don't say "clinic" and "find treatment / book" within 5 seconds → redesign.
+</div>
+</div>
+
+<div class="gate" style="border-color:var(--blu)">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--blu);margin-bottom:6px">🚪 EXIT GATE — Stage 5</div>
+<p style="font-size:13px;color:var(--mute);margin:0">You can move to Stage 6 when: wireframes approved, design system documented, high-fidelity mockups for all key screens done, and 5-person hallway test passed.</p>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ STAGE 6 — CONTENT ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--vlt)">Stage 6</div>
+<div class="sec-title">Create the Content.</div>
+<p class="sec-sub">This is the stage everyone underestimates. You can't launch a treatment page without treatment data. You can't show patient stories without collecting them. Start this EARLY — it has the longest lead time.</p>
+
+<div style="margin-top:32px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+<span class="time-tag">⏱ 2-4 weeks</span>
+<span style="font-size:13px;color:var(--dim)">Start in parallel with Stage 5</span>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+
+<div class="card">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:8px">📋 Treatment Data Collection</h4>
+<p style="font-size:13px;color:var(--mute);line-height:1.7">Sit with Welona's doctors. For each treatment: get the REAL price ranges, REAL side effects, REAL session counts, REAL timelines. Don't copy from websites — get it from the doctors who do these procedures daily.</p>
+<div style="font-size:12px;color:var(--dim);margin-top:8px"><strong>Who:</strong> You + clinic medical director · <strong>Time:</strong> 2-3 hours per treatment</div>
+</div>
+
+<div class="card">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:8px">📸 Patient Story Collection</h4>
+<p style="font-size:13px;color:var(--mute);line-height:1.7">Identify 6-8 satisfied patients. Ask them to share their experience in their own words. Record 3-4 video testimonials (even phone quality is fine — authenticity > production value). Get written consent.</p>
+<div style="font-size:12px;color:var(--dim);margin-top:8px"><strong>Who:</strong> Clinic reception team identifies candidates · <strong>Time:</strong> 1-2 weeks to collect</div>
+</div>
+
+<div class="card">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:8px">👩‍⚕️ Doctor Profiles</h4>
+<p style="font-size:13px;color:var(--mute);line-height:1.7">Professional photos, verified credentials, specializations, languages, consultation counts. This content doesn't exist today — it's a critical trust gap.</p>
+<div style="font-size:12px;color:var(--dim);margin-top:8px"><strong>Who:</strong> You coordinate with each doctor · <strong>Time:</strong> 1 week</div>
+</div>
+
+<div class="card">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:8px">✍️ Copy & SEO Content</h4>
+<p style="font-size:13px;color:var(--mute);line-height:1.7">Write all page copy, FAQ schema markup, meta descriptions, treatment descriptions in plain language. Remember: your user doesn't speak doctor. Write like you're explaining to a smart friend.</p>
+<div style="font-size:12px;color:var(--dim);margin-top:8px"><strong>Who:</strong> You (or a content writer) · <strong>Time:</strong> 1-2 weeks</div>
+</div>
+
+</div>
+
+<div class="gate" style="border-color:var(--vlt)">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--vlt);margin-bottom:6px">🚪 EXIT GATE — Stage 6</div>
+<p style="font-size:13px;color:var(--mute);margin:0">All treatment data verified by doctors, 6+ patient stories collected (3+ with video), all doctor profiles complete, all page copy written and reviewed.</p>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ STAGE 7 — BUILD ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--crl)">Stage 7</div>
+<div class="sec-title">Build It.</div>
+<p class="sec-sub">NOW you write code. And because you did Stages 1-6, you know EXACTLY what to build. No guessing. No redesigns mid-sprint. No "actually, can we change this?"</p>
+
+<div style="margin-top:32px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+<span class="time-tag">⏱ 6-8 weeks</span>
+</div>
+
+<div class="card" style="margin-bottom:16px">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:10px">Tech Stack (recommended for solo dev)</h4>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+<span class="tool-tag">Next.js (React)</span><span class="tool-tag">Tailwind CSS</span><span class="tool-tag">PostgreSQL</span><span class="tool-tag">Vercel hosting</span><span class="tool-tag">Mixpanel analytics</span>
+</div>
+<p style="font-size:13px;color:var(--mute)">Next.js gives you SSR for SEO, React for interactivity, and Vercel for reliable hosting. For a solo dev, this stack maximizes speed with minimal ops overhead.</p>
+</div>
+
+<h4 style="font-size:16px;font-weight:700;margin-bottom:16px">Sprint Plan (2-week sprints)</h4>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+
+<div class="card" style="border-left:4px solid var(--crl)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h4 style="font-size:15px;font-weight:700">Sprint 1 — Foundation</h4>
+<span class="time-tag">Week 1-2</span>
+</div>
+<div style="font-size:13px;color:var(--mute);line-height:1.8">
+• Project setup (Next.js, Tailwind, deploy pipeline)<br/>
+• Design system implementation (all components from Stage 5B)<br/>
+• Navigation + layout shell<br/>
+• Homepage with hero + video testimonial section<br/>
+• Social proof ticker
+</div>
+<div style="font-size:12px;color:var(--dim);margin-top:8px"><strong>Ship:</strong> Homepage that loads, looks right, and has the emotional hook working.</div>
+</div>
+
+<div class="card" style="border-left:4px solid var(--gld)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h4 style="font-size:15px;font-weight:700">Sprint 2 — Treatment Pages</h4>
+<span class="time-tag">Week 3-4</span>
+</div>
+<div style="font-size:13px;color:var(--mute);line-height:1.8">
+• Treatment detail page template<br/>
+• Side effects section (safety score, tabs, honest truth, not-a-fit)<br/>
+• Cost estimator with session slider<br/>
+• Result timeline slider<br/>
+• Eligibility checker<br/>
+• All 5 treatments populated with real data
+</div>
+<div style="font-size:12px;color:var(--dim);margin-top:8px"><strong>Ship:</strong> Every treatment page complete with transparent pricing + side effects.</div>
+</div>
+
+<div class="card" style="border-left:4px solid var(--blu)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h4 style="font-size:15px;font-weight:700">Sprint 3 — Quiz + Compare + Stories</h4>
+<span class="time-tag">Week 5-6</span>
+</div>
+<div style="font-size:13px;color:var(--mute);line-height:1.8">
+• 6-step treatment quiz with recommendation engine<br/>
+• Treatment comparison tool (side-by-side all factors)<br/>
+• Patient stories page with category filters<br/>
+• Doctor profiles page<br/>
+• Branch-specific landing pages (×3)
+</div>
+<div style="font-size:12px;color:var(--dim);margin-top:8px"><strong>Ship:</strong> The full discovery + evaluation experience.</div>
+</div>
+
+<div class="card" style="border-left:4px solid var(--grn)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h4 style="font-size:15px;font-weight:700">Sprint 4 — Booking + Polish</h4>
+<span class="time-tag">Week 7-8</span>
+</div>
+<div style="font-size:13px;color:var(--mute);line-height:1.8">
+• Live slot booking (branch → date → time → phone → OTP → confirmation)<br/>
+• WhatsApp + SMS integration (MSG91 or Twilio)<br/>
+• Neighbourhood social proof on branch pages<br/>
+• Mixpanel event tracking on all key actions<br/>
+• Mobile optimization pass<br/>
+• Performance optimization (Core Web Vitals)
+</div>
+<div style="font-size:12px;color:var(--dim);margin-top:8px"><strong>Ship:</strong> The complete end-to-end product. User can discover, evaluate, trust, and book.</div>
+</div>
+
+</div>
+
+<div class="gate" style="border-color:var(--crl)">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--crl);margin-bottom:6px">🚪 EXIT GATE — Stage 7</div>
+<p style="font-size:13px;color:var(--mute);margin:0">All features functional on mobile + desktop. All real content populated. Analytics tracking confirmed. Lighthouse score > 90. Zero broken links or flows.</p>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ STAGE 8 — VALIDATE & LAUNCH ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--grn)">Stage 8</div>
+<div class="sec-title">Validate & Launch.</div>
+<p class="sec-sub">Don't launch to everyone on day one. Launch to one branch. Watch real users. Fix what breaks. Then expand.</p>
+
+<div style="margin-top:32px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+<span class="time-tag">⏱ 2-3 weeks</span>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:16px">
+
+<div class="card">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:8px">Week 1: Internal Testing + Usability</h4>
+<div style="font-size:13px;color:var(--mute);line-height:1.8">
+• Give the site to 5 real people who match your personas<br/>
+• Ask them to: "Find a treatment for your concern and book a consultation"<br/>
+• Watch them (screen share or in-person). Don't help. Just observe.<br/>
+• Where do they get confused? Where do they pause? Where do they smile?<br/>
+• Fix the confusion points. Ship fixes in 2-3 days.
+</div>
+</div>
+
+<div class="card">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:8px">Week 2: Beta Launch — T. Nagar Only</h4>
+<div style="font-size:13px;color:var(--mute);line-height:1.8">
+• Route T. Nagar Google Ads to the new site<br/>
+• Keep other branches on the old site<br/>
+• Monitor: bounce rate, quiz completion, booking rate, time-on-page<br/>
+• Talk to reception: "Are people mentioning the website? Did they use the quiz?"<br/>
+• Fix issues daily. This is the most important 2 weeks of the project.
+</div>
+</div>
+
+<div class="card">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:8px">Week 3: Full Rollout</h4>
+<div style="font-size:13px;color:var(--mute);line-height:1.8">
+• If T. Nagar metrics are positive → roll out to Adyar and Anna Nagar<br/>
+• Switch all Google Ads to new site<br/>
+• Redirect welona.in to new platform<br/>
+• Announce on Google My Business, social media
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ STAGE 9 — MEASURE & ITERATE ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--grn)">Stage 9</div>
+<div class="sec-title">Measure & Iterate.<br/>Forever.</div>
+<p class="sec-sub">Launching is not the finish line. It's the starting line. Now you learn what's ACTUALLY working — because real users will always surprise you.</p>
+
+<div style="margin-top:32px">
+
+<div class="card" style="margin-bottom:16px">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:14px">KPIs to Track Weekly</h4>
+<div style="display:flex;flex-direction:column;gap:0">
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--faint)">
+<span style="font-size:14px;font-weight:600">Ad → Booking conversion rate</span>
+<span style="font-size:14px;font-weight:700;color:var(--grn)">Target: 12-15%</span>
+</div>
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--faint)">
+<span style="font-size:14px;font-weight:600">Quiz completion rate</span>
+<span style="font-size:14px;font-weight:700;color:var(--grn)">Target: >60%</span>
+</div>
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--faint)">
+<span style="font-size:14px;font-weight:600">Quiz → Booking rate</span>
+<span style="font-size:14px;font-weight:700;color:var(--grn)">Target: >25%</span>
+</div>
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--faint)">
+<span style="font-size:14px;font-weight:600">Homepage bounce rate</span>
+<span style="font-size:14px;font-weight:700;color:var(--grn)">Target: <40%</span>
+</div>
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--faint)">
+<span style="font-size:14px;font-weight:600">Treatment page time</span>
+<span style="font-size:14px;font-weight:700;color:var(--grn)">Target: >2 min</span>
+</div>
+<div style="display:flex;justify-content:space-between;padding:12px 0">
+<span style="font-size:14px;font-weight:600">No-show rate</span>
+<span style="font-size:14px;font-weight:700;color:var(--grn)">Target: <15%</span>
+</div>
+</div>
+</div>
+
+<div class="card" style="margin-bottom:16px">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:10px">After 30 Days: Decide Phase 2</h4>
+<p style="font-size:14px;color:var(--mute);line-height:1.7">Look at the data. Which features are used most? Where do users drop off? What questions are they asking reception that the site doesn't answer? This data — not your assumptions — decides what to build next.</p>
+</div>
+
+</div>
+</section>
+
+<!-- ═══════════════ THE RULES ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--crl)">Rules to live by</div>
+<div class="sec-title">7 things that will save you<br/>from wasting months.</div>
+
+<div style="margin-top:32px;display:flex;flex-direction:column;gap:12px">
+
+<div class="card" style="border-left:4px solid var(--crl)">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:4px">1. Never build a feature you can't trace back to the user research doc.</h4>
+<p style="font-size:13px;color:var(--mute)">If it doesn't solve a pain point, fear, or job from that document — it doesn't ship. Period.</p>
+</div>
+
+<div class="card" style="border-left:4px solid var(--gld)">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:4px">2. Ship ugly before shipping late.</h4>
+<p style="font-size:13px;color:var(--mute)">A working product with real data and imperfect design beats a beautiful product that isn't live. You can always improve design. You can't improve a product nobody is using.</p>
+</div>
+
+<div class="card" style="border-left:4px solid var(--blu)">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:4px">3. Content is the product. Code is just the delivery mechanism.</h4>
+<p style="font-size:13px;color:var(--mute)">The real value is the treatment data, the honest side effects, the real patient stories. The React code just renders it. Don't spend 3 weeks on animations when the treatment descriptions are still lorem ipsum.</p>
+</div>
+
+<div class="card" style="border-left:4px solid var(--grn)">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:4px">4. Test with 5 users, not 50.</h4>
+<p style="font-size:13px;color:var(--mute)">Jakob Nielsen proved that 5 users find 85% of usability problems. Don't wait for a big study. Show it to 5 people who match your personas. Fix what confuses them. Repeat.</p>
+</div>
+
+<div class="card" style="border-left:4px solid var(--vlt)">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:4px">5. One branch first. Always.</h4>
+<p style="font-size:13px;color:var(--mute)">Launch at T. Nagar. Learn for 2 weeks. Fix everything. Then expand. Multi-branch launch on day one = multi-branch disaster on day two.</p>
+</div>
+
+<div class="card" style="border-left:4px solid var(--gld)">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:4px">6. Your opinion doesn't matter. The data does.</h4>
+<p style="font-size:13px;color:var(--mute)">After launch, stop debating whether the quiz should be 4 steps or 6. Look at the completion rate. If 70% complete 6 steps, it's fine. If 30% drop at step 4, you have your answer.</p>
+</div>
+
+<div class="card" style="border-left:4px solid var(--crl)">
+<h4 style="font-size:15px;font-weight:700;margin-bottom:4px">7. The biggest risk isn't building the wrong feature. It's never launching.</h4>
+<p style="font-size:13px;color:var(--mute)">Perfectionism kills more products than bad code. Set a launch date. Hit it. Fix everything after. The cost of inaction (₹30-40 lakhs/month in lost revenue from your diagnosis) is real and compounding.</p>
+</div>
+
+</div>
+</section>
+
+<!-- ═══════════════ TIMELINE SUMMARY ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--grn)">The timeline</div>
+<div class="sec-title">12 weeks from here<br/>to live product.</div>
+
+<div style="margin-top:32px">
+<div class="card" style="padding:0;overflow:hidden">
+<div style="display:flex;border-bottom:1px solid var(--border);background:rgba(74,222,128,.03)">
+<div style="padding:14px 20px;width:120px;border-right:1px solid var(--border);font-size:12px;font-weight:700;color:var(--grn)">DONE</div>
+<div style="padding:14px 20px;flex:1;font-size:14px">Stages 1-3: Problem diagnosis + User research + Strategy</div>
+</div>
+<div style="display:flex;border-bottom:1px solid var(--border);background:rgba(232,184,109,.03)">
+<div style="padding:14px 20px;width:120px;border-right:1px solid var(--border);font-size:12px;font-weight:700;color:var(--gld)">WEEK 1-2</div>
+<div style="padding:14px 20px;flex:1;font-size:14px">Stage 4: Sitemap + User flows + Content inventory</div>
+</div>
+<div style="display:flex;border-bottom:1px solid var(--border)">
+<div style="padding:14px 20px;width:120px;border-right:1px solid var(--border);font-size:12px;font-weight:700;color:var(--dim)">WEEK 2-4</div>
+<div style="padding:14px 20px;flex:1;font-size:14px">Stage 5: Wireframes + Design system + High-fidelity mockups</div>
+</div>
+<div style="display:flex;border-bottom:1px solid var(--border)">
+<div style="padding:14px 20px;width:120px;border-right:1px solid var(--border);font-size:12px;font-weight:700;color:var(--dim)">WEEK 2-5</div>
+<div style="padding:14px 20px;flex:1;font-size:14px">Stage 6: Content collection (parallel with Stage 5)</div>
+</div>
+<div style="display:flex;border-bottom:1px solid var(--border)">
+<div style="padding:14px 20px;width:120px;border-right:1px solid var(--border);font-size:12px;font-weight:700;color:var(--dim)">WEEK 5-12</div>
+<div style="padding:14px 20px;flex:1;font-size:14px">Stage 7: Build (4 sprints × 2 weeks)</div>
+</div>
+<div style="display:flex;border-bottom:1px solid var(--border)">
+<div style="padding:14px 20px;width:120px;border-right:1px solid var(--border);font-size:12px;font-weight:700;color:var(--dim)">WEEK 12-14</div>
+<div style="padding:14px 20px;flex:1;font-size:14px">Stage 8: Validate (testing + beta at T. Nagar + rollout)</div>
+</div>
+<div style="display:flex">
+<div style="padding:14px 20px;width:120px;border-right:1px solid var(--border);font-size:12px;font-weight:700;color:var(--dim)">WEEK 14+</div>
+<div style="padding:14px 20px;flex:1;font-size:14px">Stage 9: Measure, iterate, plan Phase 2</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ WHAT'S NEXT ═══════════════ -->
+<section class="sec">
+<div class="sec-label" style="color:var(--gld)">What's next</div>
+<div class="sec-title">Your immediate next step.</div>
+
+<div style="margin-top:32px">
+<div class="card" style="border:2px solid var(--gld);padding:32px">
+<div style="font-size:28px;margin-bottom:16px">👉</div>
+<h3 style="font-size:20px;font-weight:700;margin-bottom:12px">Start Stage 4: Architect the Experience</h3>
+<p style="font-size:15px;color:var(--mute);line-height:1.7;margin-bottom:20px">Open Figma (or a whiteboard, or paper). Draw the sitemap. Map the 5 user flows. List every piece of content you need. This takes 1-2 focused days.</p>
+<div style="background:var(--bg3);border-radius:12px;padding:16px;font-size:14px;color:var(--ink);line-height:1.7">
+<strong>This week:</strong><br/>
+1. Draw the sitemap (all pages, how they connect)<br/>
+2. Map the Discovery Flow (Ad → Homepage → Quiz → Treatment → Book)<br/>
+3. Start the content inventory (what you have vs. what you need from the clinic)
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════ CLOSING ═══════════════ -->
+<section style="padding:80px 24px;text-align:center">
+<div style="max-width:560px;margin:0 auto">
+<div style="font-family:var(--hd);font-size:clamp(24px,4vw,32px);line-height:1.25;margin-bottom:16px">You have the research.<br/>You have the strategy.<br/>Now you have the path.<br/><span style="color:var(--grn)">Go build.</span></div>
+<div style="margin-top:40px;font-size:12px;color:var(--faint)">Vartha · Product Manager · Welona Clinics · April 2026</div>
+</div>
+</section>
+
+</body>
+</html>
